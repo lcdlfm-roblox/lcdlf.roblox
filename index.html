@@ -57,30 +57,34 @@
 
     <script>
         // REEMPLAZA ESTO CON TU URL DE GOOGLE SCRIPT
-        const scriptURL = 'TU_URL_AQUI'; 
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzQXUdBysscScmglbwOgnz9suzMxnMqxa2PvTsTWocK2TG8N4RMg7-h_EYuV7rFXyq3/exec; 
         const form = document.getElementById('registroLcdlf');
 
         form.addEventListener('submit', e => {
             e.preventDefault();
-            document.getElementById('btnEnviar').innerText = "Enviando...";
+           form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.innerText = "Enviando...";
 
-            const rol = document.getElementById('rol').value;
-            const rand = Math.floor(1000 + Math.random() * 9000);
-            const folioFinal = `${rol}-${rand}`;
+        // Tu URL de Google Apps Script va aquí abajo
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzQXUdBysscScmglbwOgnz9suzMxnMqxa2PvTsTWocK2TG8N4RMg7-h_EYuV7rFXyq3/exec; 
 
-            // Creamos los datos para enviar incluyendo el folio
-            const formData = new FormData(form);
-            formData.append('folio', folioFinal);
-            formData.append('fecha', new Date().toLocaleString());
+        const rol = document.getElementById('rol').value;
+        const rand = Math.floor(1000 + Math.random() * 9000);
+        const folioFinal = `${rol}-${rand}`;
 
-            fetch(scriptURL, { method: 'POST', body: formData})
-                .then(response => {
-                    document.getElementById('form-box').style.display = 'none';
-                    document.getElementById('exito').style.display = 'block';
-                    document.getElementById('folio').innerText = folioFinal;
-                })
-                .catch(error => alert('Error al guardar en base de datos'));
-        });
-    </script>
-</body>
-</html>
+        const formData = new FormData(form);
+        formData.append('folio', folioFinal);
+
+        fetch(scriptURL, { method: 'POST', body: formData})
+            .then(response => {
+                document.getElementById('form-box').style.display = 'none';
+                document.getElementById('exito').style.display = 'block';
+                document.getElementById('folio').innerText = folioFinal;
+            })
+            .catch(error => {
+                alert('Error al guardar');
+                btn.innerText = "Enviar Registro";
+            });
+    });
