@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF - Consulta</title>
+    <title>LCDLF - Estatus</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
         body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
@@ -12,33 +13,69 @@
         button { width: 100%; padding: 15px; background: var(--rosa); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
         .info-box { background: #064e3b; padding: 20px; border-radius: 12px; border: 1px solid #22c55e; margin-top: 20px; }
         .error-box { background: #450a0a; padding: 20px; border-radius: 12px; border: 1px solid #ef4444; margin-top: 20px; }
+        #pase-vip { background: white; color: black; padding: 50px; text-align: center; font-family: Arial; border: 15px solid #db2777; }
     </style>
 </head>
 <body>
+
 <div class="card">
-    <h1>Estatus de Selección</h1>
-    <p style="color:#cbd5e1">Ingresa tu folio para ver los resultados.</p>
-    <input type="text" id="inputFolio" placeholder="EJ: HAB-1234">
-    <button onclick="buscar()">Consultar</button>
+    <h1>Consultar Resultados</h1>
+    <input type="text" id="inputFolio" placeholder="TU FOLIO AQUÍ">
+    <button onclick="buscar()">Verificar</button>
     <div id="resultado"></div>
-    <button onclick="location.href='/'" style="background:#334155; margin-top:15px">Regresar</button>
+    <button onclick="location.href='index.html'" style="background:#334155; margin-top:15px; font-size: 11px;">Inicio</button>
 </div>
+
+<div style="display: none;">
+    <div id="pase-vip">
+        <h1 style="color:#db2777">LA CASA DE LOS FAMOSOS</h1>
+        <hr>
+        <p>¡FELICIDADES!</p>
+        <h2 id="pdfNombre" style="font-size: 35px; text-transform: uppercase;"></h2>
+        <p>Has sido seleccionado como Habitante Oficial.</p>
+        <div style="font-size: 30px; font-weight: bold; border: 2px solid black; padding: 10px; margin: 20px;" id="pdfFolio"></div>
+        <p>Presenta este pase para ingresar.</p>
+        <br><br>
+        <p style="font-size: 12px;">alexissesence.mx</p>
+    </div>
+</div>
+
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbywI1NJu22rwi003mcpFZKwtfL-Jx26WaX4Qqa5QbVF4hTrGhCZNoTxxLD4uk2iWf1v/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyK3Lgh822F8iSxr2KwV1eIHhP3-kPJ66iDfTCtJGAT-UWcz3CzcknD-w9Pd5DCD58/exec';
+    let nombreSeleccionado = "";
+    let folioSeleccionado = "";
+
     async function buscar() {
         const f = document.getElementById('inputFolio').value.trim();
         const r = document.getElementById('resultado');
         if(!f) return;
-        r.innerHTML = "<p>Buscando...</p>";
+        r.innerHTML = "Buscando...";
+
         try {
             const resp = await fetch(scriptURL + "?folio=" + f);
-            const texto = await resp.text();
-            if (texto.includes("SELECCIONADO") && !texto.includes("NO_SELECCIONADO")) {
-                r.innerHTML = `<div class="info-box"><span style="color:#22c55e; font-weight:bold; font-size:18px;">⭐ ¡HAS SIDO SELECCIONADO!</span><br><br>Revisa tu correo pronto.</div>`;
+            const data = await resp.text(); 
+
+            if (data.includes("SELECCIONADO")) {
+                const partes = data.split("|");
+                nombreSeleccionado = partes[1] || "HABITANTE";
+                folioSeleccionado = f;
+
+                r.innerHTML = `
+                    <div class="info-box">
+                        <span style="font-weight:bold; font-size:18px;">⭐ ¡FELICIDADES ${nombreSeleccionado}!</span><br><br>
+                        <button onclick="descargar()" style="background:#22c55e; border:none; color:white; padding:10px; cursor:pointer; font-weight:bold; border-radius:5px; width:100%;">📥 DESCARGAR PASE VIP</button>
+                    </div>`;
             } else {
-                r.innerHTML = `<div class="error-box"><span style="color:#ef4444; font-weight:bold; font-size: 18px;">❌ NO HAS SIDO SELECCIONADO</span><br><br>Gracias por participar.</div>`;
+                r.innerHTML = `<div class="error-box">❌ No has sido seleccionado aún.</div>`;
             }
         } catch (e) { r.innerHTML = "Error de conexión."; }
+    }
+
+    function descargar() {
+        document.getElementById('pdfNombre').innerText = nombreSeleccionado;
+        document.getElementById('pdfFolio').innerText = folioSeleccionado;
+        const element = document.getElementById('pase-vip');
+        html2pdf().set({ margin: 0.5, filename: 'PASE_VIP_LCDLF.pdf' }).from(element).save();
     }
 </script>
 </body>
