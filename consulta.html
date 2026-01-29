@@ -6,62 +6,109 @@
     <title>LCDLF - Estatus VIP</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
+        :root { --rosa: #db2777; --dorado: #fbbf24; --fondo: #0f172a; }
         body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--naranja); text-align: center; }
-        input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 8px; background: #0f172a; color: white; border: 1px solid #334155; width: 80%; }
-        button { width: 100%; padding: 15px; background: var(--rosa); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        .info-box { background: #064e3b; padding: 20px; border-radius: 12px; margin-top: 20px; }
-        #pase-vip { background: white; color: black; padding: 40px; text-align: center; font-family: Arial; border: 10px solid #0f172a; }
+        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--dorado); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 8px; background: #0f172a; color: white; border: 1px solid #334155; box-sizing: border-box; text-align: center; font-size: 18px; }
+        button { width: 100%; padding: 15px; background: var(--rosa); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
+        .info-box { background: #064e3b; padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid #22c55e; }
+        
+        /* --- ESTILO DEL PDF (DE GALA) --- */
+        #pase-vip { 
+            width: 600px; height: 800px; background: #000; color: white; padding: 0; 
+            text-align: center; font-family: 'Times New Roman', serif; position: relative; overflow: hidden;
+        }
+        .pdf-border { border: 15px solid #1a1a1a; height: 770px; position: relative; }
+        .header-top { background: linear-gradient(to bottom, #fbbf24, #b45309); color: black; padding: 10px; font-weight: bold; letter-spacing: 5px; }
+        .title-main { font-size: 45px; color: #db2777; margin-top: 40px; text-transform: uppercase; font-weight: bold; }
+        .sub-title { font-size: 14px; letter-spacing: 10px; color: #fbbf24; margin-bottom: 50px; }
+        .user-name { font-size: 40px; margin: 20px 0; border-bottom: 2px solid #333; display: inline-block; padding: 0 30px; }
+        .email-box { color: #fbbf24; font-size: 18px; font-family: Arial, sans-serif; margin-bottom: 30px; }
+        .folio-box { font-size: 50px; font-weight: bold; color: white; margin: 40px 0; font-family: 'Courier New', monospace; }
+        .footer-banner { position: absolute; bottom: 40px; width: 100%; background: #db2777; color: white; padding: 15px 0; font-size: 12px; font-family: Arial; font-weight: bold; }
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 150px; opacity: 0.05; color: white; pointer-events: none; z-index: 0; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Consultar Estatus</h1>
-        <input type="text" id="inputFolio" placeholder="TU FOLIO">
-        <button onclick="buscar()">Verificar</button>
-        <div id="resultado"></div>
-    </div>
 
-    <div style="display: none;">
-        <div id="pase-vip">
-            <h1 style="color:#db2777">LA CASA DE LOS FAMOSOS</h1>
-            <p>PASE OFICIAL DE HABITANTE</p>
-            <h2 id="pdfNombre" style="font-size: 30px;"></h2>
-            <p>Correo: <span id="pdfCorreo" style="font-weight:bold; color:#db2777"></span></p>
-            <div id="pdfFolio" style="font-size: 24px; font-weight: bold; border: 2px solid black; margin: 20px 0;"></div>
-            <p style="background:black; color:white; padding:5px;">GUARDA ESTE PDF PARA INGRESAR</p>
+<div class="card">
+    <h1>Estatus Habitante</h1>
+    <p style="color:#94a3b8">Ingresa tu folio para descargar tu credencial de gala.</p>
+    <input type="text" id="inputFolio" placeholder="EJ: HAB-1234">
+    <button onclick="buscar()">Verificar Mi Entrada</button>
+    <div id="resultado"></div>
+</div>
+
+<div style="display: none;">
+    <div id="pase-vip">
+        <div class="pdf-border">
+            <div class="header-top">PASE EXCLUSIVO</div>
+            <div class="watermark">VIP</div>
+            
+            <h1 class="title-main">La Casa de los Famosos</h1>
+            <p class="sub-title">TEMPORADA 2026</p>
+            
+            <p style="font-size: 16px; color: #94a3b8;">Bienvenido(a) oficialmente:</p>
+            <div id="pdfNombre" class="user-name"></div>
+            
+            <p style="margin-top: 30px;">Tu cuenta institucional:</p>
+            <div id="pdfCorreo" class="email-box"></div>
+            
+            <p>Folio de Acceso:</p>
+            <div id="pdfFolio" class="folio-box"></div>
+            
+            <div class="footer-banner">
+                ⚠️ DOCUMENTO OBLIGATORIO PARA EL INGRESO - PROPIEDAD DE ALEXISSESENCE.MX
+            </div>
         </div>
     </div>
+</div>
 
-    <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxOuJkxPbL5n3LJdQtI5GscBqIQ6-ZrA86KqjpZJtDu7GUclbT9hnQLTPJWhv7IExlm/exec';
-        let nData = ""; let fData = "";
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxOuJkxPbL5n3LJdQtI5GscBqIQ6-ZrA86KqjpZJtDu7GUclbT9hnQLTPJWhv7IExlm/exec';
+    let nData = ""; let fData = "";
 
-        async function buscar() {
-            const f = document.getElementById('inputFolio').value.trim();
-            if(!f) return;
-            document.getElementById('resultado').innerHTML = "Buscando...";
-            try {
-                const resp = await fetch(scriptURL + "?folio=" + f);
-                const data = await resp.text();
-                if (data.includes("SELECCIONADO")) {
-                    nData = data.split("|")[1]; fData = f;
-                    document.getElementById('resultado').innerHTML = `
-                        <div class="info-box">
-                            <p>⭐ ¡FELICIDADES ${nData}!</p>
-                            <button onclick="descargar()" style="background:#22c55e;">📥 BAJAR PASE VIP</button>
-                        </div>`;
-                } else { document.getElementById('resultado').innerHTML = "<p>No seleccionado aún.</p>"; }
-            } catch { document.getElementById('resultado').innerHTML = "Error."; }
+    async function buscar() {
+        const f = document.getElementById('inputFolio').value.trim();
+        if(!f) return;
+        document.getElementById('resultado').innerHTML = "<p>Consultando base de datos...</p>";
+
+        try {
+            const resp = await fetch(scriptURL + "?folio=" + f);
+            const data = await resp.text();
+            
+            if (data.includes("SELECCIONADO")) {
+                nData = data.split("|")[1];
+                fData = f;
+                document.getElementById('resultado').innerHTML = `
+                    <div class="info-box">
+                        <p style="font-size: 18px;">✨ ¡ESTÁS DENTRO, ${nData}!</p>
+                        <p style="font-size: 12px; color: #fbbf24;">Guarda el PDF, se te pedirá en la entrada.</p>
+                        <button onclick="descargar()" style="background:#22c55e;">📥 DESCARGAR PASE DE GALA</button>
+                    </div>`;
+            } else {
+                document.getElementById('resultado').innerHTML = "<p style='color:#ef4444; margin-top:20px;'>❌ Aún no has sido seleccionado o el folio no existe.</p>";
+            }
+        } catch {
+            document.getElementById('resultado').innerHTML = "<p>Error de conexión.</p>";
         }
+    }
 
-        function descargar() {
-            document.getElementById('pdfNombre').innerText = nData;
-            document.getElementById('pdfFolio').innerText = fData;
-            document.getElementById('pdfCorreo').innerText = nData.replace(/\s+/g, '').toLowerCase() + "@alexissesence.mx";
-            html2pdf().from(document.getElementById('pase-vip')).save();
-        }
-    </script>
+    function descargar() {
+        document.getElementById('pdfNombre').innerText = nData;
+        document.getElementById('pdfFolio').innerText = fData;
+        document.getElementById('pdfCorreo').innerText = nData.replace(/\s+/g, '').toLowerCase() + "@alexissesence.mx";
+        
+        const element = document.getElementById('pase-vip');
+        const opt = {
+            margin: 0,
+            filename: `PASE_VIP_${nData}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'px', format: [600, 800], orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
 </body>
 </html>
