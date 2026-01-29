@@ -1,59 +1,30 @@
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF - Registro</title>
-    <style>
-        :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
-        body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--rosa); box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        h1 { font-size: 22px; text-transform: uppercase; border-bottom: 2px solid var(--naranja); padding-bottom: 10px; margin-bottom: 20px; }
-        input, select, textarea { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
-        #exito { display: none; }
-        .folio-box { font-size: 32px; color: var(--naranja); font-weight: bold; margin: 20px 0; border: 2px dashed var(--rosa); padding: 15px; background: #0f172a; border-radius: 10px; }
-    </style>
-</head>
-<body>
-<div class="card">
-    <div id="formulario">
-        <h1>Registro Aspirantes</h1>
-        <form id="f">
-            <input type="text" name="usuario" placeholder="Usuario Roblox" required>
-            <input type="tel" name="whatsapp" placeholder="WhatsApp" required>
-            <input type="number" name="edad" placeholder="Edad" required>
-            <input type="email" name="correo" placeholder="Correo" required>
-            <select name="rol" id="rol"><option value="HAB">Habitante</option><option value="STF">Staff</option></select>
-            <textarea name="motivo" placeholder="¿Por qué deberías entrar?" rows="2"></textarea>
-            <button type="submit" id="btnEnv">Enviar Registro</button>
-        </form>
-    </div>
-    <div id="exito">
-        <h2 style="color:var(--naranja)">¡REGISTRO RECIBIDO!</h2>
-        <p>Tu folio es:</p>
-        <div id="folioGen" class="folio-box"></div>
-        <p style="font-size:13px; color:#cbd5e1">Guarda este código para consultar tus resultados.</p>
-        <button onclick="location.href='/'">Volver al Inicio</button>
-    </div>
-</div>
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbywI1NJu22rwi003mcpFZKwtfL-Jx26WaX4Qqa5QbVF4hTrGhCZNoTxxLD4uk2iWf1v/exec';
-    document.getElementById('f').addEventListener('submit', async (e) => {
+    // TU URL ACTUALIZADA
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzKr7kLvVgSJMeJcOJeY5kmsGYBet5q6bP0MEuvyuJObDXAWB2xWUilej31XjW3CkZV/exec';
+
+    document.getElementById('reg').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('btnEnv');
-        btn.innerText = "Procesando..."; btn.disabled = true;
-        const folio = document.getElementById('rol').value + "-" + Math.floor(1000 + Math.random() * 9000);
+        const b = document.getElementById('b');
+        b.innerText = "Enviando registro...";
+        b.disabled = true;
+
         const fd = new FormData(e.target);
-        fd.append('folio', folio);
+        
         try {
+            // Usamos mode: 'no-cors' para evitar bloqueos de seguridad de Google
             await fetch(scriptURL, { method: 'POST', body: fd, mode: 'no-cors' });
-            document.getElementById('formulario').style.display = 'none';
-            document.getElementById('exito').style.display = 'block';
-            document.getElementById('folioGen').innerText = folio;
-        } catch (e) { alert("Error al enviar."); btn.innerText = "Enviar Registro"; btn.disabled = false; }
+            
+            // Como usamos no-cors, no podemos leer la respuesta, así que avisamos al usuario
+            document.getElementById('c').innerHTML = `
+                <h2 style="color: #22c55e;">¡REGISTRO ENVIADO!</h2>
+                <p>Tu información se ha mandado al Staff.</p>
+                <p style="font-weight:bold; color:var(--naranja);">Revisa el Excel en unos segundos.</p>
+                <button onclick="location.href='index.html'">Volver al Inicio</button>
+            `;
+        } catch (e) { 
+            alert("Error al conectar con el servidor."); 
+            b.innerText = "Enviar Registro";
+            b.disabled = false;
+        }
     });
 </script>
-</body>
-</html>
