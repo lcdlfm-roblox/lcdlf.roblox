@@ -1,135 +1,113 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF Roblox - Consulta</title>
+    <title>LCDLF Roblox - Portal</title>
     <style>
-        /* Estilos basados en la paleta del logo */
+        :root {
+            --azul: #00d4ff;
+            --rosa: #ff00cc;
+            --dorado: #ffcc00;
+        }
         body {
-            background-color: #0d1b2a; /* Azul oscuro de fondo */
-            background: linear-gradient(180deg, #1a0a2e 0%, #000000 100%);
+            background: linear-gradient(135deg, #0d1b2a 0%, #1a0a2e 50%, #000000 100%);
             color: white;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
-
-        .logo-container img {
-            max-width: 300px;
-            height: auto;
-            drop-shadow: 0 0 15px #00d4ff;
-            margin-bottom: 20px;
-        }
-
-        .main-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 3px solid #00d4ff; /* Azul neón del logo */
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
-            width: 90%;
-            max-width: 450px;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            background: linear-gradient(to right, #00d4ff, #ff00cc); /* Degradado Azul a Rosa */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-        }
-
-        input {
-            width: 80%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 2px solid #ff00cc; /* Rosa neón */
-            background: #111;
-            color: white;
-            font-size: 18px;
-            text-align: center;
-            margin-bottom: 20px;
-            outline: none;
-        }
-
-        button {
-            background: linear-gradient(45deg, #ffcc00, #ff9900); /* Dorado/Amarillo */
-            color: black;
-            border: none;
-            padding: 15px 30px;
+        .logo-oficial { width: 100%; max-width: 250px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 0 15px var(--azul); }
+        
+        /* Estilo del Menú */
+        nav { margin-bottom: 30px; display: flex; gap: 15px; }
+        .nav-btn {
+            background: transparent;
+            border: 2px solid var(--azul);
+            color: var(--azul);
+            padding: 10px 20px;
             border-radius: 50px;
-            font-weight: bold;
-            font-size: 16px;
             cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px #ffcc00;
-        }
-
-        #result {
-            margin-top: 25px;
-            font-size: 20px;
             font-weight: bold;
+            transition: 0.3s;
         }
+        .nav-btn.active { background: var(--azul); color: black; }
 
-        .winner { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
-        .try-again { color: #ff4d4d; }
+        .card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid var(--rosa);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(255, 0, 204, 0.3);
+            width: 90%;
+            max-width: 400px;
+            display: none; /* Se ocultan por defecto */
+        }
+        .card.active { display: block; } /* Solo se muestra la activa */
+
+        h2 { background: linear-gradient(to right, var(--azul), var(--rosa)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        input, select { width: 85%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--azul); background: #000; color: #fff; }
+        
+        .btn-accion { background: var(--dorado); color: black; border: none; padding: 15px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; }
+        
+        #res { margin-top: 20px; font-size: 1.2em; }
     </style>
 </head>
 <body>
 
-    <div class="logo-container">
-        <img src="https://r.jina.ai/i/0586f78f99e4468f9a2e88a07f35368a" alt="Logo LCDLF">
+    <img src="https://r.jina.ai/i/0586f78f99e4468f9a2e88a07f35368a" class="logo-oficial">
+
+    <nav>
+        <button class="nav-btn active" onclick="mostrar('seccion-consulta', this)">CONSULTAR</button>
+        <button class="nav-btn" onclick="mostrar('seccion-registro', this)">REGISTRAR</button>
+    </nav>
+
+    <div id="seccion-consulta" class="card active">
+        <h2>¿Fuiste elegido?</h2>
+        <p>Introduce tu folio:</p>
+        <input type="text" id="folioInput" placeholder="Ej: LCDLF-123">
+        <button class="btn-accion" onclick="verificar()">VER RESULTADOS</button>
+        <div id="res"></div>
     </div>
 
-    <div class="main-card">
-        <h1>Estatus de Selección</h1>
-        <p>Ingresa tu folio para saber si entras a la casa:</p>
-        
-        <input type="text" id="userFolio" placeholder="Ej: LCDLF-777">
-        <br>
-        <button onclick="verificar()">Consultar Resultados</button>
-
-        <div id="result"></div>
+    <div id="seccion-registro" class="card">
+        <h2>Únete a la Casa</h2>
+        <p>Completa tus datos para postularte:</p>
+        <input type="text" placeholder="Usuario de Roblox">
+        <select>
+            <option>Habitante</option>
+            <option>Staff (Trabajo)</option>
+        </select>
+        <button class="btn-accion" onclick="alert('¡Próximamente! Conecta esto con un formulario.')">ENVIAR POSTULACIÓN</button>
     </div>
 
     <script>
-        // --- LISTA DE FOLIOS QUE SÍ FUERON SELECCIONADOS ---
-        const seleccionados = [
-            "ADMIN1",
-            "LCDLF-2026",
-            "FAMOSO-01",
-            "STAFF-VIP"
-        ];
+        // Función para cambiar entre pestañas
+        function mostrar(id, btn) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // Sistema de folios ganadores
+        const ganadores = ["FOLIO-01", "ALEXIS-VIP", "STAFF-LCDLF"];
 
         function verificar() {
-            const input = document.getElementById('userFolio').value.trim().toUpperCase();
-            const display = document.getElementById('result');
-
-            if (input === "") {
-                display.innerHTML = "⚠️ Por favor escribe un folio.";
-                return;
-            }
-
-            if (seleccionados.includes(input)) {
-                display.innerHTML = "<div class='winner'>✅ ¡FELICIDADES! <br> Has sido seleccionado.</div>";
+            const input = document.getElementById('folioInput').value.trim().toUpperCase();
+            const res = document.getElementById('res');
+            if (ganadores.includes(input)) {
+                res.innerHTML = "<span style='color:#00ff88'>⭐ ¡ESTÁS DENTRO! ⭐</span>";
             } else {
-                display.innerHTML = "<div class='try-again'>❌ Folio no seleccionado. <br> ¡Sigue participando!</div>";
+                res.innerHTML = "<span style='color:#ff4d4d'>❌ No seleccionado aún.</span>";
             }
         }
     </script>
-
 </body>
 </html>
