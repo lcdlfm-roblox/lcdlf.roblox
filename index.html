@@ -5,83 +5,167 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro Oficial - LCDLF</title>
     <style>
+        /* Paleta extraída del logo: Azul #3b82f6, Rosa #db2777, Dorado #d4af37 */
         body {
-            background-color: #111827;
-            color: #f3f4f6;
-            font-family: Arial, sans-serif;
+            background-color: #0f172a; /* Fondo azul oscuro profundo */
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
-            padding: 40px 0;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
+
         .registro-card {
-            background-color: #1f2937;
-            padding: 30px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 450px;
-            border-top: 5px solid #b8860b;
+            background-color: #1e293b;
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border-radius: 12px;
+            border-top: 6px solid #d4af37; /* Borde dorado mate */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
         }
-        h1 { text-align: center; color: #fff; font-size: 22px; text-transform: uppercase; }
-        label { display: block; margin-top: 15px; font-size: 14px; color: #d1d5db; }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #db2777; /* Subrayado rosa vibrante */
+            padding-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #94a3b8;
+        }
+
         input, select, textarea {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #374151;
-            background-color: #111827;
-            color: white;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            background-color: #0f172a;
+            color: #ffffff;
+            font-size: 16px;
             box-sizing: border-box;
         }
-        textarea { height: 80px; resize: none; }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6; /* Brillo azul al seleccionar */
+        }
+
+        /* Grupo de dos columnas para WhatsApp y Edad */
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        .form-row div { flex: 1; }
+
         button {
             width: 100%;
-            padding: 15px;
-            background-color: #b8860b;
-            color: #000;
+            padding: 16px;
+            background-color: #d4af37; /* Dorado del logo */
+            color: #000000;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             font-weight: bold;
-            margin-top: 25px;
+            font-size: 16px;
             cursor: pointer;
             text-transform: uppercase;
+            transition: background 0.3s ease;
         }
-        button:hover { background-color: #daa520; }
+
+        button:hover {
+            background-color: #f1c40f;
+        }
+
+        /* Pantalla de Folio */
+        #pantallaFolio {
+            display: none;
+            text-align: center;
+        }
+
+        .folio-display {
+            font-size: 32px;
+            color: #d4af37;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px dashed #db2777;
+            background-color: #0f172a;
+        }
     </style>
 </head>
 <body>
 
     <div class="registro-card">
-        <h1>Formulario de Aspirante</h1>
-        <form id="formLcdlf">
-            <label>Usuario de Roblox:</label>
-            <input type="text" id="user" required placeholder="Ej: Player123">
+        <div id="formularioContenedor">
+            <h1>Registro de Aspirante</h1>
+            <form id="registroForm">
+                <label>Usuario de Roblox</label>
+                <input type="text" id="robloxUser" required placeholder="Nombre en el juego">
 
-            <label>Edad:</label>
-            <input type="number" id="edad" required>
+                <div class="form-row">
+                    <div>
+                        <label>WhatsApp</label>
+                        <input type="tel" id="whatsapp" required placeholder="+52...">
+                    </div>
+                    <div>
+                        <label>Edad</label>
+                        <input type="number" id="edad" required placeholder="00">
+                    </div>
+                </div>
 
-            <label>¿A qué te postulas?</label>
-            <select id="rol">
-                <option value="habitante">Habitante (Competidor)</option>
-                <option value="staff">Staff (Producción/Seguridad)</option>
-            </select>
+                <label>Correo Electrónico</label>
+                <input type="email" id="email" required placeholder="correo@ejemplo.com">
 
-            <label>Horario disponible (Ej: Tardes/Noches):</label>
-            <input type="text" id="horario" placeholder="¿A qué hora sueles jugar?">
+                <label>¿A qué rol te postulas?</label>
+                <select id="rol" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="HAB">Habitante (Competidor)</option>
+                    <option value="STF">Staff (Producción)</option>
+                    <option value="PRE">Prensa</option>
+                </select>
 
-            <label>¿Por qué deberíamos elegirte?:</label>
-            <textarea id="motivo" placeholder="Cuéntanos un poco de ti..."></textarea>
+                <label>¿Por qué quieres entrar?</label>
+                <textarea id="motivo" rows="3" placeholder="Cuéntanos tu estrategia..."></textarea>
 
-            <button type="submit">Enviar mi Postulación</button>
-        </form>
+                <button type="submit">Enviar Registro</button>
+            </form>
+        </div>
+
+        <div id="pantallaFolio">
+            <h2 style="color: #ffffff;">¡Registro Recibido!</h2>
+            <p style="color: #94a3b8;">Guarda bien tu folio para consultar los resultados:</p>
+            <div id="folioFinal" class="folio-display"></div>
+            <p style="color: #db2777; font-weight: bold; font-size: 14px;">TOMA UNA CAPTURA DE PANTALLA</p>
+            <button onclick="window.location.reload()" style="margin-top: 20px; background-color: #334155; color: white;">Volver</button>
+        </div>
     </div>
 
     <script>
-        document.getElementById('formLcdlf').addEventListener('submit', function(e) {
+        document.getElementById('registroForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('¡Postulación enviada! El equipo revisará tus datos pronto.');
-            this.reset();
+
+            // Generar Folio: Prefijo Rol + Número aleatorio
+            const rol = document.getElementById('rol').value;
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const folio = `${rol}-${randomNum}`;
+
+            // Cambiar de pantalla
+            document.getElementById('formularioContenedor').style.display = 'none';
+            document.getElementById('pantallaFolio').style.display = 'block';
+            document.getElementById('folioFinal').innerText = folio;
         });
     </script>
 
