@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,7 +13,6 @@
         input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
         button { width: 100%; padding: 16px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
         .logo-img { width: 100px; display: block; margin: 0 auto 10px auto; border-radius: 50%; }
-        p.instruccion { font-size: 12px; color: #94a3b8; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -23,33 +21,45 @@
         <img src="https://pbs.twimg.com/profile_images/1653526955091214337/gYogD3FR_400x400.jpg" class="logo-img">
         <h1>Registro de Aspirantes</h1>
         
-        <form action="https://formspree.io/f/mqeberwn" method="POST">
+        <form id="miFormulario" action="https://formspree.io/f/mqeberwn" method="POST">
             
+            <input type="hidden" name="Folio_Asignado" id="inputFolio">
+
             <label>Usuario de Roblox</label>
-            <input type="text" name="Usuario_Roblox" required placeholder="Tu nombre en Roblox">
+            <input type="text" name="Usuario_Roblox" required>
 
             <label>WhatsApp</label>
-            <input type="tel" name="WhatsApp" required placeholder="+52...">
-
-            <label>Edad</label>
-            <input type="number" name="Edad" required>
-
-            <label>Correo Electrónico</label>
-            <input type="email" name="Email" required>
+            <input type="tel" name="WhatsApp" required>
 
             <label>¿A qué te postulas?</label>
-            <select name="Rol" required>
-                <option value="Habitante">Habitante</option>
-                <option value="Staff">Staff</option>
+            <select name="Rol" id="rolSelect" required>
+                <option value="HAB">Habitante</option>
+                <option value="STF">Staff</option>
             </select>
 
             <label>¿Por qué deberías entrar?</label>
-            <textarea name="Motivo" rows="3" placeholder="Cuéntanos sobre ti..."></textarea>
+            <textarea name="Motivo" rows="3"></textarea>
 
-            <button type="submit">Enviar mi Registro</button>
-            <p class="instruccion">Al enviar, serás redirigido a una página de confirmación.</p>
+            <button type="submit">Enviar Registro</button>
         </form>
     </div>
+
+    <script>
+        const form = document.getElementById('miFormulario');
+        
+        form.addEventListener('submit', function(e) {
+            // Generar el folio
+            const rol = document.getElementById('rolSelect').value;
+            const num = Math.floor(1000 + Math.random() * 9000);
+            const folioFinal = rol + "-" + num;
+            
+            // Guardar el folio en el campo oculto para que te llegue al correo
+            document.getElementById('inputFolio').value = folioFinal;
+            
+            // Avisar al usuario su folio antes de que la página cambie
+            alert("¡IMPORTANTE!\nTu folio de registro es: " + folioFinal + "\nPor favor, tómale captura o anótalo.");
+        });
+    </script>
 
 </body>
 </html>
