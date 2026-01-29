@@ -8,104 +8,60 @@
     <style>
         :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
         body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--naranja); box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; font-size: 18px; text-align: center; }
-        button { width: 100%; padding: 15px; background: var(--rosa); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; transition: 0.3s; }
-        .info-box { background: #064e3b; padding: 20px; border-radius: 12px; border: 1px solid #22c55e; margin-top: 20px; }
-        .warning-web { color: #fcd34d; font-size: 13px; margin: 15px 0; font-weight: bold; line-height: 1.4; }
-        
-        /* DISEÑO EXCLUSIVO PARA EL PDF */
-        #pase-vip { background: white; color: black; padding: 50px; text-align: center; font-family: 'Arial Black', Gadget, sans-serif; border: 15px solid #0f172a; }
-        .ticket-header { color: #db2777; font-size: 28px; border-bottom: 2px solid #f59e0b; padding-bottom: 10px; margin-bottom: 20px; }
-        .ticket-mail { color: #1e293b; font-weight: bold; font-size: 20px; margin: 15px 0; border: 1px dashed #334155; padding: 10px; }
-        .footer-warning { background: #000; color: #fff; padding: 15px; font-size: 12px; margin-top: 40px; font-family: Arial, sans-serif; }
+        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--naranja); text-align: center; }
+        input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 8px; background: #0f172a; color: white; border: 1px solid #334155; width: 80%; }
+        button { width: 100%; padding: 15px; background: var(--rosa); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        .info-box { background: #064e3b; padding: 20px; border-radius: 12px; margin-top: 20px; }
+        #pase-vip { background: white; color: black; padding: 40px; text-align: center; font-family: Arial; border: 10px solid #0f172a; }
     </style>
 </head>
 <body>
-
-<div class="card">
-    <h1>Portal de Resultados</h1>
-    <p style="color:#cbd5e1">Verifica tu folio oficial de aspirante.</p>
-    <input type="text" id="inputFolio" placeholder="EJ: HAB-1234">
-    <button onclick="buscar()">Consultar Selección</button>
-    <div id="resultado"></div>
-    <button onclick="location.href='index.html'" style="background:#334155; margin-top:15px; font-size: 10px;">Volver al Inicio</button>
-</div>
-
-<div style="display: none;">
-    <div id="pase-vip">
-        <div class="ticket-header">LA CASA DE LOS FAMOSOS</div>
-        <p style="font-size: 12px; letter-spacing: 4px;">PASE OFICIAL DE HABITANTE</p>
-        
-        <h2 id="pdfNombre" style="font-size: 35px; margin: 25px 0; color: #000;"></h2>
-        
-        <p style="font-size: 14px;">CORREO INSTITUCIONAL ASIGNADO:</p>
-        <div id="pdfCorreo" class="ticket-mail"></div>
-        
-        <p style="font-size: 14px;">FOLIO DE SEGURIDAD:</p>
-        <div id="pdfFolio" style="font-size: 28px; font-weight: bold; margin: 10px 0;"></div>
-        
-        <div class="footer-warning">
-            ⚠️ AVISO IMPORTANTE: GUARDA ESTE DOCUMENTO EN TU DISPOSITIVO. SE TE SOLICITARÁ OBLIGATORIAMENTE PARA INGRESAR AL PROGRAMA.
-        </div>
-        <p style="font-size: 9px; margin-top: 20px; color: #64748b;">Generado en alexissesence.mx | Documento No Transferible</p>
+    <div class="card">
+        <h1>Consultar Estatus</h1>
+        <input type="text" id="inputFolio" placeholder="TU FOLIO">
+        <button onclick="buscar()">Verificar</button>
+        <div id="resultado"></div>
     </div>
-</div>
 
-<script>
-    // URL DE TU ÚLTIMA IMPLEMENTACIÓN
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzKr7kLvVgSJMeJcOJeY5kmsGYBet5q6bP0MEuvyuJObDXAWB2xWUilej31XjW3CkZV/exec';
-    
-    let nombreData = "";
-    let folioData = "";
+    <div style="display: none;">
+        <div id="pase-vip">
+            <h1 style="color:#db2777">LA CASA DE LOS FAMOSOS</h1>
+            <p>PASE OFICIAL DE HABITANTE</p>
+            <h2 id="pdfNombre" style="font-size: 30px;"></h2>
+            <p>Correo: <span id="pdfCorreo" style="font-weight:bold; color:#db2777"></span></p>
+            <div id="pdfFolio" style="font-size: 24px; font-weight: bold; border: 2px solid black; margin: 20px 0;"></div>
+            <p style="background:black; color:white; padding:5px;">GUARDA ESTE PDF PARA INGRESAR</p>
+        </div>
+    </div>
 
-    async function buscar() {
-        const f = document.getElementById('inputFolio').value.trim();
-        const r = document.getElementById('resultado');
-        if(!f) return alert("Por favor escribe tu folio.");
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxOuJkxPbL5n3LJdQtI5GscBqIQ6-ZrA86KqjpZJtDu7GUclbT9hnQLTPJWhv7IExlm/exec';
+        let nData = ""; let fData = "";
 
-        r.innerHTML = "<p>Buscando en la base de datos...</p>";
-
-        try {
-            const resp = await fetch(scriptURL + "?folio=" + f);
-            const data = await resp.text();
-
-            if (data.includes("SELECCIONADO")) {
-                nombreData = data.split("|")[1];
-                folioData = f;
-                r.innerHTML = `
-                    <div class="info-box">
-                        <span style="font-weight:bold; font-size:18px; color: #22c55e;">⭐ ¡HAS SIDO SELECCIONADO!</span>
-                        <p class="warning-web">⚠️ IMPORTANTE: DEBES DESCARGAR EL PDF Y GUARDARLO. SIN ÉL NO PODRÁS INGRESAR.</p>
-                        <button onclick="descargar()" style="background:#22c55e;">📥 DESCARGAR MI PASE VIP</button>
-                    </div>`;
-            } else {
-                r.innerHTML = `<div class="error-box">❌ El folio no ha sido seleccionado. Intenta más tarde.</div>`;
-            }
-        } catch (e) { 
-            r.innerHTML = "<p>Error de conexión. Verifica que el script de Google esté bien configurado.</p>"; 
+        async function buscar() {
+            const f = document.getElementById('inputFolio').value.trim();
+            if(!f) return;
+            document.getElementById('resultado').innerHTML = "Buscando...";
+            try {
+                const resp = await fetch(scriptURL + "?folio=" + f);
+                const data = await resp.text();
+                if (data.includes("SELECCIONADO")) {
+                    nData = data.split("|")[1]; fData = f;
+                    document.getElementById('resultado').innerHTML = `
+                        <div class="info-box">
+                            <p>⭐ ¡FELICIDADES ${nData}!</p>
+                            <button onclick="descargar()" style="background:#22c55e;">📥 BAJAR PASE VIP</button>
+                        </div>`;
+                } else { document.getElementById('resultado').innerHTML = "<p>No seleccionado aún.</p>"; }
+            } catch { document.getElementById('resultado').innerHTML = "Error."; }
         }
-    }
 
-    function descargar() {
-        // Llenar datos en el PDF
-        document.getElementById('pdfNombre').innerText = nombreData;
-        document.getElementById('pdfFolio').innerText = folioData;
-        
-        // Crear correo institucional (UsuarioRoblox@alexissesence.mx)
-        const userEmail = nombreData.replace(/\s+/g, '').toLowerCase() + "@alexissesence.mx";
-        document.getElementById('pdfCorreo').innerText = userEmail;
-        
-        const element = document.getElementById('pase-vip');
-        const opt = {
-            margin: 0.5,
-            filename: `PASE_VIP_${nombreData}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 3 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
-    }
-</script>
+        function descargar() {
+            document.getElementById('pdfNombre').innerText = nData;
+            document.getElementById('pdfFolio').innerText = fData;
+            document.getElementById('pdfCorreo').innerText = nData.replace(/\s+/g, '').toLowerCase() + "@alexissesence.mx";
+            html2pdf().from(document.getElementById('pase-vip')).save();
+        }
+    </script>
 </body>
 </html>
