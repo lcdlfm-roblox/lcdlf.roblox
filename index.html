@@ -1,52 +1,132 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>LCDLF Roblox - Consulta de Folio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCDLF Roblox - Consulta</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background-color: #1a1a1a; color: white; text-align: center; padding: 50px; }
-        .container { background-color: #2c2c2c; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); display: inline-block; }
-        input { padding: 10px; border-radius: 5px; border: none; width: 200px; font-size: 16px; margin-bottom: 10px; }
-        button { padding: 10px 20px; background-color: #ffd700; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: black; }
-        #resultado { margin-top: 20px; font-size: 20px; font-weight: bold; }
-        .verde { color: #4CAF50; }
-        .rojo { color: #f44336; }
+        /* Estilos basados en la paleta del logo */
+        body {
+            background-color: #0d1b2a; /* Azul oscuro de fondo */
+            background: linear-gradient(180deg, #1a0a2e 0%, #000000 100%);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .logo-container img {
+            max-width: 300px;
+            height: auto;
+            drop-shadow: 0 0 15px #00d4ff;
+            margin-bottom: 20px;
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 3px solid #00d4ff; /* Azul neón del logo */
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
+            width: 90%;
+            max-width: 450px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #00d4ff, #ff00cc); /* Degradado Azul a Rosa */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 80%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #ff00cc; /* Rosa neón */
+            background: #111;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ffcc00, #ff9900); /* Dorado/Amarillo */
+            color: black;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #ffcc00;
+        }
+
+        #result {
+            margin-top: 25px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .winner { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
+        .try-again { color: #ff4d4d; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>🏠 La Casa de los Famosos Roblox</h1>
-        <p>Introduce tu folio para saber si fuiste seleccionado:</p>
-        
-        <input type="text" id="folioInput" placeholder="Ej: LCDLF-1234"><br>
-        <button onclick="verificarFolio()">CONSULTAR RESULTADOS</button>
+    <div class="logo-container">
+        <img src="https://r.jina.ai/i/0586f78f99e4468f9a2e88a07f35368a" alt="Logo LCDLF">
+    </div>
 
-        <div id="resultado"></div>
+    <div class="main-card">
+        <h1>Estatus de Selección</h1>
+        <p>Ingresa tu folio para saber si entras a la casa:</p>
+        
+        <input type="text" id="userFolio" placeholder="Ej: LCDLF-777">
+        <br>
+        <button onclick="verificar()">Consultar Resultados</button>
+
+        <div id="result"></div>
     </div>
 
     <script>
-        // --- AQUÍ AGREGA LOS FOLIOS DE LOS QUE GANARON EL CASTING ---
+        // --- LISTA DE FOLIOS QUE SÍ FUERON SELECCIONADOS ---
         const seleccionados = [
-            "LCDLF-1234", 
-            "LCDLF-8823", 
-            "STAFF-2024",
-            "HABITANTE-01"
+            "ADMIN1",
+            "LCDLF-2026",
+            "FAMOSO-01",
+            "STAFF-VIP"
         ];
 
-        function verificarFolio() {
-            const folio = document.getElementById('folioInput').value.trim().toUpperCase();
-            const divResultado = document.getElementById('resultado');
+        function verificar() {
+            const input = document.getElementById('userFolio').value.trim().toUpperCase();
+            const display = document.getElementById('result');
 
-            if (folio === "") {
-                divResultado.innerHTML = "Por favor, escribe un folio.";
+            if (input === "") {
+                display.innerHTML = "⚠️ Por favor escribe un folio.";
                 return;
             }
 
-            if (seleccionados.includes(folio)) {
-                divResultado.innerHTML = `<span class="verde">✅ ¡FELICIDADES! <br> Has sido seleccionado para la Casa.</span>`;
+            if (seleccionados.includes(input)) {
+                display.innerHTML = "<div class='winner'>✅ ¡FELICIDADES! <br> Has sido seleccionado.</div>";
             } else {
-                divResultado.innerHTML = `<span class="rojo">❌ Lo sentimos, este folio no ha sido seleccionado.</span>`;
+                display.innerHTML = "<div class='try-again'>❌ Folio no seleccionado. <br> ¡Sigue participando!</div>";
             }
         }
     </script>
