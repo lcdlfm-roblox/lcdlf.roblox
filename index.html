@@ -1,27 +1,119 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF - Inicio</title>
+    <title>LCDLF | Inicio</title>
+
     <style>
-        :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
-        body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; text-align: center; }
-        .card { background: #1e293b; padding: 40px; border-radius: 20px; border-top: 6px solid var(--rosa); box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 400px; width: 90%; }
-        h1 { font-size: 24px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
-        .btn { display: block; padding: 15px; margin: 15px 0; border-radius: 10px; text-decoration: none; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
-        .btn-registro { background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; }
-        .btn-consulta { background: #334155; color: white; border: 1px solid #475569; }
-        .btn:hover { transform: scale(1.05); opacity: 0.9; }
+        :root {
+            --rosa: #db2777;
+            --naranja: #f59e0b;
+            --fondo: #0f172a;
+            --card: #1e293b;
+            --texto-secundario: #cbd5e1;
+            --borde: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--fondo);
+            color: #fff;
+            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        }
+
+        main {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 40px 35px;
+            border-radius: 20px;
+            border-top: 6px solid var(--rosa);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .descripcion {
+            color: var(--texto-secundario);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            display: block;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.25s ease, opacity 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .btn-registro {
+            background: linear-gradient(90deg, var(--rosa), var(--naranja));
+            color: #fff;
+        }
+
+        .btn-consulta {
+            background: #334155;
+            color: #fff;
+            border: 1px solid var(--borde);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.95;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid var(--naranja);
+            outline-offset: 3px;
+        }
     </style>
 </head>
+
 <body>
-    <div class="card">
-        <h1>LA CASA DE LOS FAMOSOS</h1>
-        <p style="color: #cbd5e1; margin-bottom: 25px;">Bienvenido al portal oficial de reclutamiento.</p>
-        <a href="/registro" class="btn btn-registro">Registrarme</a>
-        <a href="/consulta" class="btn btn-consulta">Consultar Estatus</a>
-    </div>
+    <main>
+        <section class="card" aria-labelledby="titulo">
+            <h1 id="titulo">La Casa de los Famosos</h1>
+
+            <p class="descripcion">
+                Bienvenido al portal oficial de reclutamiento.
+            </p>
+
+            <a href="/registro" class="btn btn-registro" aria-label="Ir al registro">
+                Registrarme
+            </a>
+
+            <a href="/consulta" class="btn btn-consulta" aria-label="Consultar estatus">
+                Consultar estatus
+            </a>
+        </section>
+    </main>
 </body>
 </html>
