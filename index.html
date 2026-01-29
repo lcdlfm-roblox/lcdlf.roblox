@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>LCDLF Roblox - Consulta de Folio</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #1a1a1a; color: white; text-align: center; padding: 50px; }
+        .container { background-color: #2c2c2c; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); display: inline-block; }
+        input { padding: 10px; border-radius: 5px; border: none; width: 200px; font-size: 16px; margin-bottom: 10px; }
+        button { padding: 10px 20px; background-color: #ffd700; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: black; }
+        #resultado { margin-top: 20px; font-size: 20px; font-weight: bold; }
+        .verde { color: #4CAF50; }
+        .rojo { color: #f44336; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🏠 La Casa de los Famosos Roblox</h1>
+        <p>Introduce tu folio para saber si fuiste seleccionado:</p>
+        
+        <input type="text" id="folioInput" placeholder="Ej: LCDLF-1234"><br>
+        <button onclick="verificarFolio()">CONSULTAR RESULTADOS</button>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        // --- AQUÍ AGREGA LOS FOLIOS DE LOS QUE GANARON EL CASTING ---
+        const seleccionados = [
+            "LCDLF-1234", 
+            "LCDLF-8823", 
+            "STAFF-2024",
+            "HABITANTE-01"
+        ];
+
+        function verificarFolio() {
+            const folio = document.getElementById('folioInput').value.trim().toUpperCase();
+            const divResultado = document.getElementById('resultado');
+
+            if (folio === "") {
+                divResultado.innerHTML = "Por favor, escribe un folio.";
+                return;
+            }
+
+            if (seleccionados.includes(folio)) {
+                divResultado.innerHTML = `<span class="verde">✅ ¡FELICIDADES! <br> Has sido seleccionado para la Casa.</span>`;
+            } else {
+                divResultado.innerHTML = `<span class="rojo">❌ Lo sentimos, este folio no ha sido seleccionado.</span>`;
+            }
+        }
+    </script>
+
+</body>
+</html>
