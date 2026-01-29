@@ -57,37 +57,32 @@
             <button onclick="location.reload()" style="background: #334155;">Nuevo Registro</button>
         </div>
     </div>
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzQXUdBysscScmglbwOgnz9suzMxnMqxa2PvTsTWocK2TG8N4RMg7-h_EYuV7rFXyq3/exec';
 
-    <script>
-        // URL DE TU CAPTURA YA INTEGRADA
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzQXUdBysscScmglbwOgnz9suzMxnMqxa2PvTsTWocK2TG8N4RMg7-h_EYuV7rFXyq3/exec'; 
+    const form = document.getElementById('registroForm');
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.innerText = "Enviando...";
+        btn.disabled = true;
 
-        const form = document.getElementById('registroForm');
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            const btn = document.getElementById('btnEnviar');
-            btn.innerText = "Enviando...";
-            btn.disabled = true;
+        const rol = document.getElementById('rol').value;
+        const rand = Math.floor(1000 + Math.random() * 9000);
+        const folioFinal = `${rol}-${rand}`;
 
-            const rol = document.getElementById('rol').value;
-            const rand = Math.floor(1000 + Math.random() * 9000);
-            const folioFinal = `${rol}-${rand}`;
+        const formData = new FormData(form);
+        formData.append('folio', folioFinal);
 
-            const formData = new FormData(form);
-            formData.append('folio', folioFinal);
-
-            fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors'})
-                .then(() => {
-                    document.getElementById('form-box').style.display = 'none';
-                    document.getElementById('exito').style.display = 'block';
-                    document.getElementById('folio').innerText = folioFinal;
-                })
-                .catch(error => {
-                    alert('Error al enviar. Intenta de nuevo.');
-                    btn.innerText = "Enviar Registro";
-                    btn.disabled = false;
-                });
-        });
-    </script>
-</body>
-</html>        
+        fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors'})
+            .then(() => {
+                document.getElementById('form-box').style.display = 'none';
+                document.getElementById('exito').style.display = 'block';
+                document.getElementById('folio').innerText = folioFinal;
+            })
+            .catch(error => {
+                alert('Error al enviar');
+                btn.innerText = "Enviar Registro";
+                btn.disabled = false;
+            });
+    });
+</script>
