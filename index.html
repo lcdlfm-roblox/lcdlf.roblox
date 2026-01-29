@@ -1,21 +1,24 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF - Registro y Consulta</title>
+    <title>LCDLF - Estatus de Selección</title>
     <style>
         :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
-        body { background-color: var(--fondo); color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--rosa); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h1 { text-align: center; color: white; text-transform: uppercase; font-size: 22px; border-bottom: 2px solid var(--naranja); padding-bottom: 10px; margin-bottom: 20px; }
+        body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--rosa); box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; }
+        h1 { text-align: center; color: white; text-transform: uppercase; font-size: 20px; border-bottom: 2px solid var(--naranja); padding-bottom: 10px; margin-bottom: 20px; }
         label { display: block; margin-top: 15px; font-size: 13px; color: #cbd5e1; font-weight: bold; }
         input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
+        button { width: 100%; padding: 15px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; transition: 0.3s; }
+        button:hover { opacity: 0.9; transform: scale(1.02); }
         #exito, #seccionConsulta { display: none; text-align: center; }
         .folio-box { font-size: 32px; color: var(--naranja); font-weight: bold; margin: 20px 0; border: 2px dashed var(--rosa); padding: 15px; background: #0f172a; border-radius: 10px; }
-        .btn-gris { background: #334155; margin-top: 10px; }
+        .info-box { background: #0f172a; padding: 25px; border-radius: 12px; border: 1px solid #22c55e; margin-top: 10px; line-height: 1.6; }
+        .error-box { background: #450a0a; padding: 25px; border-radius: 12px; border: 1px solid #ef4444; margin-top: 10px; line-height: 1.6; }
+        .btn-secundario { background: #334155; margin-top: 10px; border: 1px solid #475569; }
+        a { color: var(--naranja); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -23,59 +26,53 @@
     <div class="card">
         <div id="contenedorRegistro">
             <h1>Registro Aspirantes</h1>
-            <form id="registroForm">
+            <form id="formFamosos">
                 <label>Usuario de Roblox</label>
                 <input type="text" name="usuario" required>
-
                 <label>WhatsApp</label>
                 <input type="tel" name="whatsapp" required>
-
                 <label>Edad</label>
                 <input type="number" name="edad" required>
-
                 <label>Correo Electrónico</label>
                 <input type="email" name="correo" required>
-
                 <label>¿A qué te postulas?</label>
                 <select name="rol" id="rolSelect">
                     <option value="HAB">Habitante</option>
                     <option value="STF">Staff</option>
                 </select>
-
                 <label>¿Por qué deberías entrar?</label>
                 <textarea name="motivo" rows="2"></textarea>
-
                 <button type="submit" id="btnEnviar">Enviar Registro</button>
             </form>
-            <button class="btn-gris" onclick="verConsulta()">Consultar mi Folio</button>
+            <button class="btn-secundario" onclick="verConsulta()">Consultar Estatus</button>
         </div>
 
         <div id="exito">
-            <h2 style="color: var(--naranja);">¡REGISTRADO!</h2>
-            <p>Tu folio oficial es:</p>
+            <h2 style="color: var(--naranja);">¡REGISTRO RECIBIDO!</h2>
+            <p>Guarda tu folio para consultar tu estatus:</p>
             <div id="mostrarFolio" class="folio-box"></div>
-            <p style="color: #94a3b8; font-size: 13px;">Guarda bien este código.</p>
-            <button onclick="location.reload()">Regresar</button>
+            <p style="font-size: 14px; color: #cbd5e1;">Toma captura de pantalla.</p>
+            <button onclick="location.reload()">Finalizar</button>
         </div>
 
         <div id="seccionConsulta">
-            <h1>Consulta Estatus</h1>
-            <input type="text" id="inputBusqueda" placeholder="Ingresa tu folio">
-            <button onclick="ejecutarConsulta()">Verificar</button>
-            <div id="resultadoBusqueda" style="margin-top: 20px; font-weight: bold;"></div>
-            <button class="btn-gris" onclick="location.reload()">Volver</button>
+            <h1>Verificar Selección</h1>
+            <p style="font-size: 13px; color: #cbd5e1;">Ingresa tu folio para saber si fuiste elegido.</p>
+            <input type="text" id="inputBusqueda" placeholder="Ej: HAB-1234">
+            <button onclick="ejecutarConsulta()">Consultar</button>
+            <div id="resultadoBusqueda" style="margin-top: 20px;"></div>
+            <button class="btn-secundario" onclick="location.reload()">Regresar</button>
         </div>
     </div>
 
     <script>
-        // TU URL ACTUALIZADA
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyAusbcrbi9KszylDvbw3ehGvvLlqTn4knljjnUqOJI1IYRx3VaOpzppcqayI-xyokE/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbww-Tfp39jQvDTHrMH8zWVKCG7VwW1kO8C_AWZq8frWpR7hVEafamrkg1Gy8Kj-AO_k/exec';
 
         // REGISTRO
-        document.getElementById('registroForm').addEventListener('submit', async e => {
+        document.getElementById('formFamosos').addEventListener('submit', async e => {
             e.preventDefault();
             const btn = document.getElementById('btnEnviar');
-            btn.innerText = "Guardando...";
+            btn.innerText = "Enviando...";
             btn.disabled = true;
 
             const rol = document.getElementById('rolSelect').value;
@@ -90,32 +87,48 @@
                 document.getElementById('exito').style.display = 'block';
                 document.getElementById('mostrarFolio').innerText = folioFinal;
             } catch (error) {
-                alert("Error de conexión");
+                alert("Error al enviar.");
                 btn.innerText = "Enviar Registro";
                 btn.disabled = false;
             }
         });
 
-        // CONSULTA
         function verConsulta() {
             document.getElementById('contenedorRegistro').style.display = 'none';
             document.getElementById('seccionConsulta').style.display = 'block';
         }
 
+        // CONSULTA DE ESTATUS
         async function ejecutarConsulta() {
             const f = document.getElementById('inputBusqueda').value.trim();
             const res = document.getElementById('resultadoBusqueda');
-            if(!f) return alert("Escribe un folio");
-            res.innerText = "Buscando...";
+            if(!f) return alert("Escribe tu folio");
+
+            res.innerHTML = "<p>Buscando en la lista oficial...</p>";
             
             try {
                 const response = await fetch(`${scriptURL}?folio=${f}`);
                 const texto = await response.text();
-                res.innerHTML = (texto.includes("Encontrado")) ? 
-                    "<span style='color:#22c55e'>✅ FOLIO REGISTRADO</span>" : 
-                    "<span style='color:#ef4444'>❌ NO ENCONTRADO</span>";
+                
+                if (texto.includes("Encontrado")) {
+                    // MENSAJE CUANDO SÍ FUE SELECCIONADO
+                    res.innerHTML = `
+                        <div class="info-box">
+                            <span style='color:#22c55e; font-weight:bold; font-size: 18px;'>⭐ ¡HAS SIDO SELECCIONADO!</span><br><br>
+                            <span style="font-size: 15px;">Próximamente recibirás toda la información por correo electrónico.</span><br><br>
+                            <span style="font-size: 12px; color: #94a3b8;">Dudas: <a href="mailto:lcdlf.roblox@alexissesence.mx">lcdlf.roblox@alexissesence.mx</a></span>
+                        </div>`;
+                } else {
+                    // MENSAJE CUANDO NO FUE SELECCIONADO
+                    res.innerHTML = `
+                        <div class="error-box">
+                            <span style='color:#ef4444; font-weight:bold; font-size: 18px;'>❌ NO HAS SIDO SELECCIONADO</span><br><br>
+                            <span style="font-size: 14px;">Gracias por tu interés en participar. Te invitamos a estar pendiente de futuras ediciones.</span><br><br>
+                            <span style="font-size: 12px; color: #94a3b8;">Dudas: <a href="mailto:lcdlf.roblox@alexissesence.mx">lcdlf.roblox@alexissesence.mx</a></span>
+                        </div>`;
+                }
             } catch (e) {
-                res.innerText = "Error en la consulta";
+                res.innerHTML = "<p>Error de conexión.</p>";
             }
         }
     </script>
