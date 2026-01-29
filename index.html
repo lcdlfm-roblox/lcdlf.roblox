@@ -1,119 +1,163 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF | Inicio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LCDLF | Inicio</title>
 
-    <style>
-        :root {
-            --rosa: #db2777;
-            --naranja: #f59e0b;
-            --fondo: #0f172a;
-            --card: #1e293b;
-            --texto-secundario: #cbd5e1;
-            --borde: #475569;
-        }
+<style>
+:root {
+    --rosa: #ec4899;
+    --naranja: #fbbf24;
+    --morado: #8b5cf6;
+    --fondo: radial-gradient(circle at top, #f472b6, #7c3aed, #020617);
+    --card: rgba(15, 23, 42, 0.85);
+}
 
-        * {
-            box-sizing: border-box;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--fondo);
-            color: #fff;
-            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-        }
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: var(--fondo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    overflow: hidden;
+}
 
-        main {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-        }
+/* Luces de fondo */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(236,72,153,.25), transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(139,92,246,.25), transparent 40%);
+    animation: luces 8s infinite alternate;
+    z-index: -1;
+}
 
-        .card {
-            background: var(--card);
-            padding: 40px 35px;
-            border-radius: 20px;
-            border-top: 6px solid var(--rosa);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-        }
+@keyframes luces {
+    from { opacity: .6; }
+    to   { opacity: 1; }
+}
 
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+.card {
+    background: var(--card);
+    backdrop-filter: blur(14px);
+    padding: 45px 35px;
+    border-radius: 26px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow:
+        0 0 35px rgba(236,72,153,.35),
+        0 25px 45px rgba(0,0,0,.6);
+    animation: entrada .8s ease;
+}
 
-        .descripcion {
-            color: var(--texto-secundario);
-            margin-bottom: 30px;
-            font-size: 0.95rem;
-        }
+@keyframes entrada {
+    from { opacity: 0; transform: translateY(30px) scale(.95); }
+    to   { opacity: 1; transform: none; }
+}
 
-        .btn {
-            display: block;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: transform 0.25s ease, opacity 0.25s ease, box-shadow 0.25s ease;
-        }
+/* LOGO */
+.logo {
+    width: 220px;
+    max-width: 100%;
+    margin-bottom: 25px;
+    filter:
+        drop-shadow(0 0 25px rgba(236,72,153,.8))
+        drop-shadow(0 0 45px rgba(251,191,36,.6));
+    animation: flotar 4s ease-in-out infinite;
+}
 
-        .btn-registro {
-            background: linear-gradient(90deg, var(--rosa), var(--naranja));
-            color: #fff;
-        }
+@keyframes flotar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
 
-        .btn-consulta {
-            background: #334155;
-            color: #fff;
-            border: 1px solid var(--borde);
-        }
+h1 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, var(--rosa), var(--naranja));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-        .btn:hover {
-            transform: translateY(-2px);
-            opacity: 0.95;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-        }
+p {
+    color: #e5e7eb;
+    margin-bottom: 35px;
+    font-size: .95rem;
+}
 
-        .btn:focus-visible {
-            outline: 3px solid var(--naranja);
-            outline-offset: 3px;
-        }
-    </style>
+/* BOTONES */
+.btn {
+    display: block;
+    padding: 16px;
+    margin: 18px 0;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: .3s;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.4), transparent);
+    transform: translateX(-100%);
+}
+
+.btn:hover::after {
+    transform: translateX(100%);
+    transition: .6s;
+}
+
+.btn-registro {
+    background: linear-gradient(135deg, var(--rosa), var(--morado));
+    color: white;
+    box-shadow: 0 0 30px rgba(236,72,153,.7);
+}
+
+.btn-consulta {
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.3);
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-3px) scale(1.03);
+}
+</style>
 </head>
 
 <body>
-    <main>
-        <section class="card" aria-labelledby="titulo">
-            <h1 id="titulo">La Casa de los Famosos</h1>
 
-            <p class="descripcion">
-                Bienvenido al portal oficial de reclutamiento.
-            </p>
+<div class="card">
+    <!-- LOGO -->
+    <img src="logo-lcdlf.png" alt="La Casa de los Famosos México" class="logo">
 
-            <a href="/registro" class="btn btn-registro" aria-label="Ir al registro">
-                Registrarme
-            </a>
+    <h1>La Casa de los Famosos</h1>
+    <p>Portal oficial de registro y consulta</p>
 
-            <a href="/consulta" class="btn btn-consulta" aria-label="Consultar estatus">
-                Consultar estatus
-            </a>
-        </section>
-    </main>
+    <!-- ENLACES -->
+    <a href="/registro.html" class="btn btn-registro">Registrarme</a>
+    <a href="/consulta.html" class="btn btn-consulta">Consultar estatus</a>
+</div>
+
 </body>
 </html>
