@@ -1,108 +1,27 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF - Estatus de Selección</title>
+    <title>LCDLF - Inicio</title>
     <style>
         :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
-        body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--rosa); box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        h1 { font-size: 20px; text-transform: uppercase; border-bottom: 2px solid var(--naranja); padding-bottom: 10px; margin-bottom: 20px; }
-        input, select, textarea { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
-        .info-box { background: #064e3b; padding: 20px; border-radius: 12px; border: 1px solid #22c55e; margin-top: 20px; line-height: 1.6; }
-        .error-box { background: #450a0a; padding: 20px; border-radius: 12px; border: 1px solid #ef4444; margin-top: 20px; line-height: 1.6; }
-        #exito, #consulta { display: none; }
+        body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; text-align: center; }
+        .card { background: #1e293b; padding: 40px; border-radius: 20px; border-top: 6px solid var(--rosa); box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 400px; width: 90%; }
+        h1 { font-size: 24px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+        .btn { display: block; padding: 15px; margin: 15px 0; border-radius: 10px; text-decoration: none; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .btn-registro { background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; }
+        .btn-consulta { background: #334155; color: white; border: 1px solid #475569; }
+        .btn:hover { transform: scale(1.05); opacity: 0.9; }
     </style>
 </head>
 <body>
-
-<div class="card">
-    <div id="registro">
-        <h1>Registro Aspirantes</h1>
-        <form id="f">
-            <input type="text" name="usuario" placeholder="Usuario Roblox" required>
-            <input type="tel" name="whatsapp" placeholder="WhatsApp" required>
-            <input type="number" name="edad" placeholder="Edad" required>
-            <input type="email" name="correo" placeholder="Correo" required>
-            <select name="rol" id="rol"><option value="HAB">Habitante</option><option value="STF">Staff</option></select>
-            <textarea name="motivo" placeholder="¿Por qué deberías entrar?" rows="2"></textarea>
-            <button type="submit" id="btnEnv">Enviar Registro</button>
-        </form>
-        <button onclick="verConsulta()" style="background:#334155; margin-top:10px">Consultar Estatus</button>
+    <div class="card">
+        <h1>LA CASA DE LOS FAMOSOS</h1>
+        <p style="color: #cbd5e1; margin-bottom: 25px;">Bienvenido al portal oficial de reclutamiento.</p>
+        <a href="/registro" class="btn btn-registro">Registrarme</a>
+        <a href="/consulta" class="btn btn-consulta">Consultar Estatus</a>
     </div>
-
-    <div id="exito">
-        <h2 style="color:var(--naranja)">¡REGISTRO RECIBIDO!</h2>
-        <p>Tu folio es:</p>
-        <h1 id="folioGen" style="border:2px dashed var(--rosa); padding:10px; color:var(--naranja)"></h1>
-        <p style="font-size:12px">Guarda este código para consultar si fuiste seleccionado.</p>
-        <button onclick="location.reload()">Volver</button>
-    </div>
-
-    <div id="consulta">
-        <h1>Verificar Selección</h1>
-        <p style="font-size:13px; color:#cbd5e1">Ingresa tu folio para saber si fuiste elegido.</p>
-        <input type="text" id="inputFolio" placeholder="Ej: HAB-1234">
-        <button onclick="buscar()">Consultar</button>
-        <div id="resFinal"></div>
-        <button onclick="location.reload()" style="background:#334155; margin-top:15px">Regresar</button>
-    </div>
-</div>
-
-<script>
-    // TU NUEVA URL DE GOOGLE SCRIPT
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbywI1NJu22rwi003mcpFZKwtfL-Jx26WaX4Qqa5QbVF4hTrGhCZNoTxxLD4uk2iWf1v/exec';
-
-    document.getElementById('f').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        document.getElementById('btnEnv').innerText = "Enviando...";
-        const folio = document.getElementById('rol').value + "-" + Math.floor(1000 + Math.random() * 9000);
-        const fd = new FormData(e.target);
-        fd.append('folio', folioFinal = folio);
-        
-        await fetch(scriptURL, { method: 'POST', body: fd, mode: 'no-cors' });
-        document.getElementById('registro').style.display = 'none';
-        document.getElementById('exito').style.display = 'block';
-        document.getElementById('folioGen').innerText = folio;
-    });
-
-    function verConsulta() {
-        document.getElementById('registro').style.display = 'none';
-        document.getElementById('consulta').style.display = 'block';
-    }
-
-    async function buscar() {
-        const f = document.getElementById('inputFolio').value.trim();
-        const r = document.getElementById('resFinal');
-        if(!f) return alert("Escribe tu folio");
-        r.innerHTML = "<p>Buscando en la lista oficial...</p>";
-
-        try {
-            const resp = await fetch(scriptURL + "?folio=" + f);
-            const texto = await resp.text();
-            
-            if (texto.toUpperCase().includes("SELECCIONADO") && !texto.toUpperCase().includes("NO_SELECCIONADO")) {
-                r.innerHTML = `
-                    <div class="info-box">
-                        <span style="color:#22c55e; font-weight:bold; font-size:18px;">⭐ ¡HAS SIDO SELECCIONADO!</span><br><br>
-                        <span>Próximamente recibirás toda la información por correo electrónico.</span><br><br>
-                        <small>Dudas: <a href="mailto:lcdlf.roblox@alexissesence.mx" style="color:white">lcdlf.roblox@alexissesence.mx</a></small>
-                    </div>`;
-            } else {
-                r.innerHTML = `
-                    <div class="error-box">
-                        <span style="color:#ef4444; font-weight:bold; font-size:18px;">❌ NO HAS SIDO SELECCIONADO</span><br><br>
-                        <span>Gracias por tu interés en participar. Te invitamos a estar pendiente de futuras ediciones.</span><br><br>
-                        <small>Dudas: <a href="mailto:lcdlf.roblox@alexissesence.mx" style="color:white">lcdlf.roblox@alexissesence.mx</a></small>
-                    </div>`;
-            }
-        } catch (e) {
-            r.innerHTML = "Error de conexión. Verifica tu internet.";
-        }
-    }
-</script>
-
 </body>
 </html>
