@@ -3,111 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF Roblox - Portal</title>
+    <title>Registro Oficial - LCDLF</title>
     <style>
-        :root {
-            --azul: #00d4ff;
-            --rosa: #ff00cc;
-            --dorado: #ffcc00;
-        }
         body {
-            background: linear-gradient(135deg, #0d1b2a 0%, #1a0a2e 50%, #000000 100%);
-            color: white;
-            font-family: 'Arial', sans-serif;
+            background-color: #111827;
+            color: #f3f4f6;
+            font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: center;
+            padding: 40px 0;
             margin: 0;
-            padding: 20px;
         }
-        .logo-oficial { width: 100%; max-width: 250px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 0 15px var(--azul); }
-        
-        /* Estilo del Menú */
-        nav { margin-bottom: 30px; display: flex; gap: 15px; }
-        .nav-btn {
-            background: transparent;
-            border: 2px solid var(--azul);
-            color: var(--azul);
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .nav-btn.active { background: var(--azul); color: black; }
-
-        .card {
-            background: rgba(0, 0, 0, 0.7);
-            border: 3px solid var(--rosa);
-            border-radius: 25px;
+        .registro-card {
+            background-color: #1f2937;
             padding: 30px;
-            text-align: center;
-            box-shadow: 0 0 25px rgba(255, 0, 204, 0.3);
+            border-radius: 10px;
             width: 90%;
-            max-width: 400px;
-            display: none; /* Se ocultan por defecto */
+            max-width: 450px;
+            border-top: 5px solid #b8860b;
         }
-        .card.active { display: block; } /* Solo se muestra la activa */
-
-        h2 { background: linear-gradient(to right, var(--azul), var(--rosa)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        input, select { width: 85%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--azul); background: #000; color: #fff; }
-        
-        .btn-accion { background: var(--dorado); color: black; border: none; padding: 15px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; }
-        
-        #res { margin-top: 20px; font-size: 1.2em; }
+        h1 { text-align: center; color: #fff; font-size: 22px; text-transform: uppercase; }
+        label { display: block; margin-top: 15px; font-size: 14px; color: #d1d5db; }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #374151;
+            background-color: #111827;
+            color: white;
+            box-sizing: border-box;
+        }
+        textarea { height: 80px; resize: none; }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #b8860b;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 25px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        button:hover { background-color: #daa520; }
     </style>
 </head>
 <body>
 
-    <img src="https://r.jina.ai/i/0586f78f99e4468f9a2e88a07f35368a" class="logo-oficial">
+    <div class="registro-card">
+        <h1>Formulario de Aspirante</h1>
+        <form id="formLcdlf">
+            <label>Usuario de Roblox:</label>
+            <input type="text" id="user" required placeholder="Ej: Player123">
 
-    <nav>
-        <button class="nav-btn active" onclick="mostrar('seccion-consulta', this)">CONSULTAR</button>
-        <button class="nav-btn" onclick="mostrar('seccion-registro', this)">REGISTRAR</button>
-    </nav>
+            <label>Edad:</label>
+            <input type="number" id="edad" required>
 
-    <div id="seccion-consulta" class="card active">
-        <h2>¿Fuiste elegido?</h2>
-        <p>Introduce tu folio:</p>
-        <input type="text" id="folioInput" placeholder="Ej: LCDLF-123">
-        <button class="btn-accion" onclick="verificar()">VER RESULTADOS</button>
-        <div id="res"></div>
-    </div>
+            <label>¿A qué te postulas?</label>
+            <select id="rol">
+                <option value="habitante">Habitante (Competidor)</option>
+                <option value="staff">Staff (Producción/Seguridad)</option>
+            </select>
 
-    <div id="seccion-registro" class="card">
-        <h2>Únete a la Casa</h2>
-        <p>Completa tus datos para postularte:</p>
-        <input type="text" placeholder="Usuario de Roblox">
-        <select>
-            <option>Habitante</option>
-            <option>Staff (Trabajo)</option>
-        </select>
-        <button class="btn-accion" onclick="alert('¡Próximamente! Conecta esto con un formulario.')">ENVIAR POSTULACIÓN</button>
+            <label>Horario disponible (Ej: Tardes/Noches):</label>
+            <input type="text" id="horario" placeholder="¿A qué hora sueles jugar?">
+
+            <label>¿Por qué deberíamos elegirte?:</label>
+            <textarea id="motivo" placeholder="Cuéntanos un poco de ti..."></textarea>
+
+            <button type="submit">Enviar mi Postulación</button>
+        </form>
     </div>
 
     <script>
-        // Función para cambiar entre pestañas
-        function mostrar(id, btn) {
-            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        // Sistema de folios ganadores
-        const ganadores = ["FOLIO-01", "ALEXIS-VIP", "STAFF-LCDLF"];
-
-        function verificar() {
-            const input = document.getElementById('folioInput').value.trim().toUpperCase();
-            const res = document.getElementById('res');
-            if (ganadores.includes(input)) {
-                res.innerHTML = "<span style='color:#00ff88'>⭐ ¡ESTÁS DENTRO! ⭐</span>";
-            } else {
-                res.innerHTML = "<span style='color:#ff4d4d'>❌ No seleccionado aún.</span>";
-            }
-        }
+        document.getElementById('formLcdlf').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('¡Postulación enviada! El equipo revisará tus datos pronto.');
+            this.reset();
+        });
     </script>
+
 </body>
 </html>
