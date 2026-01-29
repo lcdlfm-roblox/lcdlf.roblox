@@ -27,17 +27,17 @@
             <input type="number" name="edad" placeholder="Edad" required>
             <input type="email" name="correo" placeholder="Correo" required>
             <select name="rol" id="rol"><option value="HAB">Habitante</option><option value="STF">Staff</option></select>
-            <textarea name="motivo" placeholder="¿Por qué tú?" rows="2"></textarea>
+            <textarea name="motivo" placeholder="¿Por qué deberías entrar?" rows="2"></textarea>
             <button type="submit" id="btnEnv">Enviar Registro</button>
         </form>
-        <button onclick="verConsulta()" style="background:#334155; margin-top:10px">Consultar Folio</button>
+        <button onclick="verConsulta()" style="background:#334155; margin-top:10px">Consultar Estatus</button>
     </div>
 
     <div id="exito">
         <h2 style="color:var(--naranja)">¡REGISTRO RECIBIDO!</h2>
         <p>Tu folio es:</p>
         <h1 id="folioGen" style="border:2px dashed var(--rosa); padding:10px; color:var(--naranja)"></h1>
-        <p style="font-size:12px">Guarda este código para consultar tu estatus.</p>
+        <p style="font-size:12px">Guarda este código para consultar si fuiste seleccionado.</p>
         <button onclick="location.reload()">Volver</button>
     </div>
 
@@ -45,22 +45,22 @@
         <h1>Verificar Selección</h1>
         <p style="font-size:13px; color:#cbd5e1">Ingresa tu folio para saber si fuiste elegido.</p>
         <input type="text" id="inputFolio" placeholder="Ej: HAB-1234">
-        <button onclick="buscar()">Consultar Estatus</button>
+        <button onclick="buscar()">Consultar</button>
         <div id="resFinal"></div>
         <button onclick="location.reload()" style="background:#334155; margin-top:15px">Regresar</button>
     </div>
 </div>
 
 <script>
-    // TU NUEVA URL ACTUALIZADA
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwCjURr4PgvHNPsZjB8BfMqP3qhgUHGDU_K47xrAKyxLjw_21N08xK3cO6XTbfKkxXm/exec';
+    // TU NUEVA URL DE GOOGLE SCRIPT
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbywI1NJu22rwi003mcpFZKwtfL-Jx26WaX4Qqa5QbVF4hTrGhCZNoTxxLD4uk2iWf1v/exec';
 
     document.getElementById('f').addEventListener('submit', async (e) => {
         e.preventDefault();
         document.getElementById('btnEnv').innerText = "Enviando...";
-        const folio = document.getElementById('rol').value + "-" + Math.floor(1000 + Math.random() * 9999);
+        const folio = document.getElementById('rol').value + "-" + Math.floor(1000 + Math.random() * 9000);
         const fd = new FormData(e.target);
-        fd.append('folio', folio);
+        fd.append('folio', folioFinal = folio);
         
         await fetch(scriptURL, { method: 'POST', body: fd, mode: 'no-cors' });
         document.getElementById('registro').style.display = 'none';
@@ -76,14 +76,14 @@
     async function buscar() {
         const f = document.getElementById('inputFolio').value.trim();
         const r = document.getElementById('resFinal');
-        if(!f) return alert("Escribe un folio");
+        if(!f) return alert("Escribe tu folio");
         r.innerHTML = "<p>Buscando en la lista oficial...</p>";
 
         try {
             const resp = await fetch(scriptURL + "?folio=" + f);
             const texto = await resp.text();
             
-            if (texto.toUpperCase().includes("ENCONTRADO")) {
+            if (texto.toUpperCase().includes("SELECCIONADO") && !texto.toUpperCase().includes("NO_SELECCIONADO")) {
                 r.innerHTML = `
                     <div class="info-box">
                         <span style="color:#22c55e; font-weight:bold; font-size:18px;">⭐ ¡HAS SIDO SELECCIONADO!</span><br><br>
@@ -99,7 +99,7 @@
                     </div>`;
             }
         } catch (e) {
-            r.innerHTML = "Error al conectar. Verifica tu internet.";
+            r.innerHTML = "Error de conexión. Verifica tu internet.";
         }
     }
 </script>
