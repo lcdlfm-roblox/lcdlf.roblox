@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Oficial - LCDLF</title>
+    <title>La Casa De Los Famosos - Registro</title>
     <style>
-        /* Paleta extraída del logo: Azul #3b82f6, Rosa #db2777, Dorado #d4af37 */
+        /* Paleta: Rosa #db2777, Naranja #f59e0b, Azul #1e40af */
+        :root {
+            --rosa: #db2777;
+            --naranja: #f59e0b;
+            --azul-fuerte: #1e40af;
+            --fondo: #0f172a;
+        }
+
         body {
-            background-color: #0f172a; /* Fondo azul oscuro profundo */
-            color: #f8fafc;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--fondo);
+            color: #ffffff;
+            font-family: 'Segoe UI', Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,154 +25,152 @@
             padding: 20px;
         }
 
-        .registro-card {
+        .card {
             background-color: #1e293b;
             width: 100%;
             max-width: 500px;
             padding: 40px;
-            border-radius: 12px;
-            border-top: 6px solid #d4af37; /* Borde dorado mate */
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            /* Borde superior con degradado Rosa-Naranja */
+            border-top: 6px solid var(--rosa);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
         }
 
         h1 {
             text-align: center;
-            color: #ffffff;
-            font-size: 24px;
+            font-size: 26px;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 30px;
-            border-bottom: 2px solid #db2777; /* Subrayado rosa vibrante */
+            color: #ffffff;
+            border-bottom: 2px solid var(--naranja);
             padding-bottom: 10px;
         }
 
         label {
             display: block;
             font-size: 14px;
-            font-weight: 600;
             margin-bottom: 8px;
-            color: #94a3b8;
+            color: #cbd5e1;
+            font-weight: 600;
         }
 
         input, select, textarea {
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
-            border-radius: 6px;
+            border-radius: 8px;
             border: 1px solid #334155;
             background-color: #0f172a;
-            color: #ffffff;
-            font-size: 16px;
+            color: white;
+            font-size: 15px;
             box-sizing: border-box;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus, select:focus {
             outline: none;
-            border-color: #3b82f6; /* Brillo azul al seleccionar */
+            border-color: var(--rosa);
         }
 
-        /* Grupo de dos columnas para WhatsApp y Edad */
-        .form-row {
+        .flex-row {
             display: flex;
             gap: 15px;
         }
-        .form-row div { flex: 1; }
+        .flex-row div { flex: 1; }
 
+        /* Botón Naranja/Rosa */
         button {
             width: 100%;
             padding: 16px;
-            background-color: #d4af37; /* Dorado del logo */
-            color: #000000;
+            background: linear-gradient(to right, var(--rosa), var(--naranja));
+            color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: bold;
             font-size: 16px;
             cursor: pointer;
             text-transform: uppercase;
-            transition: background 0.3s ease;
+            transition: opacity 0.3s;
         }
 
         button:hover {
-            background-color: #f1c40f;
+            opacity: 0.9;
         }
 
-        /* Pantalla de Folio */
-        #pantallaFolio {
+        /* Pantalla Final */
+        #exito {
             display: none;
             text-align: center;
         }
 
         .folio-display {
             font-size: 32px;
-            color: #d4af37;
+            color: var(--naranja);
             font-weight: bold;
             margin: 20px 0;
             padding: 15px;
-            border: 2px dashed #db2777;
+            border: 2px dashed var(--rosa);
             background-color: #0f172a;
         }
     </style>
 </head>
 <body>
 
-    <div class="registro-card">
-        <div id="formularioContenedor">
-            <h1>Registro de Aspirante</h1>
-            <form id="registroForm">
+    <div class="card">
+        <div id="form-box">
+            <h1>La Casa De Los Famosos</h1>
+            <form id="registroLcdlf">
                 <label>Usuario de Roblox</label>
-                <input type="text" id="robloxUser" required placeholder="Nombre en el juego">
+                <input type="text" id="user" required placeholder="Tu nombre de usuario">
 
-                <div class="form-row">
+                <div class="flex-row">
                     <div>
                         <label>WhatsApp</label>
                         <input type="tel" id="whatsapp" required placeholder="+52...">
                     </div>
                     <div>
                         <label>Edad</label>
-                        <input type="number" id="edad" required placeholder="00">
+                        <input type="number" id="edad" required>
                     </div>
                 </div>
 
                 <label>Correo Electrónico</label>
-                <input type="email" id="email" required placeholder="correo@ejemplo.com">
+                <input type="email" id="correo" required placeholder="correo@ejemplo.com">
 
-                <label>¿A qué rol te postulas?</label>
+                <label>¿A qué te postulas?</label>
                 <select id="rol" required>
-                    <option value="" disabled selected>Selecciona una opción</option>
-                    <option value="HAB">Habitante (Competidor)</option>
-                    <option value="STF">Staff (Producción)</option>
-                    <option value="PRE">Prensa</option>
+                    <option value="" disabled selected>Selecciona tu rol</option>
+                    <option value="HAB">Habitante</option>
+                    <option value="STF">Staff</option>
                 </select>
 
-                <label>¿Por qué quieres entrar?</label>
-                <textarea id="motivo" rows="3" placeholder="Cuéntanos tu estrategia..."></textarea>
+                <label>¿Por qué deberías entrar?</label>
+                <textarea id="motivo" rows="3" placeholder="Tu estrategia..."></textarea>
 
                 <button type="submit">Enviar Registro</button>
             </form>
         </div>
 
-        <div id="pantallaFolio">
-            <h2 style="color: #ffffff;">¡Registro Recibido!</h2>
-            <p style="color: #94a3b8;">Guarda bien tu folio para consultar los resultados:</p>
-            <div id="folioFinal" class="folio-display"></div>
-            <p style="color: #db2777; font-weight: bold; font-size: 14px;">TOMA UNA CAPTURA DE PANTALLA</p>
-            <button onclick="window.location.reload()" style="margin-top: 20px; background-color: #334155; color: white;">Volver</button>
+        <div id="exito">
+            <h2>¡Registro Recibido!</h2>
+            <p>Guarda tu folio oficial para la selección:</p>
+            <div id="folio" class="folio-display"></div>
+            <p style="color: var(--rosa); font-weight: bold;">TOMA CAPTURA DE PANTALLA</p>
+            <button onclick="location.reload()" style="background: #334155; margin-top: 15px;">Regresar</button>
         </div>
     </div>
 
     <script>
-        document.getElementById('registroForm').addEventListener('submit', function(e) {
+        document.getElementById('registroLcdlf').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Generar Folio: Prefijo Rol + Número aleatorio
             const rol = document.getElementById('rol').value;
-            const randomNum = Math.floor(1000 + Math.random() * 9000);
-            const folio = `${rol}-${randomNum}`;
+            const rand = Math.floor(1000 + Math.random() * 9000);
+            const folioFinal = `${rol}-${rand}`;
 
-            // Cambiar de pantalla
-            document.getElementById('formularioContenedor').style.display = 'none';
-            document.getElementById('pantallaFolio').style.display = 'block';
-            document.getElementById('folioFinal').innerText = folio;
+            document.getElementById('form-box').style.display = 'none';
+            document.getElementById('exito').style.display = 'block';
+            document.getElementById('folio').innerText = folioFinal;
         });
     </script>
 
