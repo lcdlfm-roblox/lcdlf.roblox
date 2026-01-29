@@ -1,1 +1,45 @@
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCDLF - Consulta</title>
+    <style>
+        :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
+        body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--naranja); box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
+        input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; font-size: 18px; text-align: center; }
+        button { width: 100%; padding: 15px; background: var(--rosa); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
+        .info-box { background: #064e3b; padding: 20px; border-radius: 12px; border: 1px solid #22c55e; margin-top: 20px; }
+        .error-box { background: #450a0a; padding: 20px; border-radius: 12px; border: 1px solid #ef4444; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Estatus de Selección</h1>
+    <p style="color:#cbd5e1">Ingresa tu folio para ver los resultados.</p>
+    <input type="text" id="inputFolio" placeholder="EJ: HAB-1234">
+    <button onclick="buscar()">Consultar</button>
+    <div id="resultado"></div>
+    <button onclick="location.href='/'" style="background:#334155; margin-top:15px">Regresar</button>
+</div>
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbywI1NJu22rwi003mcpFZKwtfL-Jx26WaX4Qqa5QbVF4hTrGhCZNoTxxLD4uk2iWf1v/exec';
+    async function buscar() {
+        const f = document.getElementById('inputFolio').value.trim();
+        const r = document.getElementById('resultado');
+        if(!f) return;
+        r.innerHTML = "<p>Buscando...</p>";
+        try {
+            const resp = await fetch(scriptURL + "?folio=" + f);
+            const texto = await resp.text();
+            if (texto.includes("SELECCIONADO") && !texto.includes("NO_SELECCIONADO")) {
+                r.innerHTML = `<div class="info-box"><span style="color:#22c55e; font-weight:bold; font-size:18px;">⭐ ¡HAS SIDO SELECCIONADO!</span><br><br>Revisa tu correo pronto.</div>`;
+            } else {
+                r.innerHTML = `<div class="error-box"><span style="color:#ef4444; font-weight:bold; font-size: 18px;">❌ NO HAS SIDO SELECCIONADO</span><br><br>Gracias por participar.</div>`;
+            }
+        } catch (e) { r.innerHTML = "Error de conexión."; }
+    }
+</script>
+</body>
+</html>
