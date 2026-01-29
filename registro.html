@@ -3,87 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF - Registro de Aspirantes</title>
+    <title>LCDLF - Registro</title>
     <style>
         :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
         body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
         .card { background: #1e293b; padding: 30px; border-radius: 20px; border-top: 6px solid var(--rosa); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h1 { font-size: 24px; margin-bottom: 10px; text-transform: uppercase; color: white; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; font-size: 14px; }
-        button { width: 100%; padding: 15px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
-        button:hover { opacity: 0.9; transform: scale(1.02); }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         #folioDisplay { font-size: 28px; color: var(--naranja); font-weight: bold; margin: 20px 0; border: 2px dashed var(--rosa); padding: 15px; background: rgba(219, 39, 119, 0.1); }
-        .success-msg { color: #22c55e; font-weight: bold; }
     </style>
 </head>
 <body>
-
     <div class="card" id="contenedor">
         <h1>Inscripciones</h1>
-        <p style="color: #cbd5e1; font-size: 14px;">Completa tus datos para postularte</p>
-        
         <form id="formularioRegistro">
-            <input type="text" name="usuario" placeholder="Tu Usuario de Roblox" required>
-            <input type="tel" name="whatsapp" placeholder="WhatsApp (Ej: +52...)" required>
-            <input type="number" name="edad" placeholder="Tu Edad" required>
-            <input type="email" name="correo" placeholder="Correo Electrónico" required>
-            
-            <select name="rol">
-                <option value="HAB">Postular como Habitante</option>
-                <option value="STF">Postular como Staff</option>
-            </select>
-            
-            <textarea name="motivo" placeholder="¿Por qué deberías ser elegido?" rows="3" required></textarea>
-            
-            <button type="submit" id="btnEnviar">Enviar mi Registro</button>
+            <input type="text" name="usuario" placeholder="Usuario de Roblox" required>
+            <input type="tel" name="whatsapp" placeholder="WhatsApp" required>
+            <input type="number" name="edad" placeholder="Edad" required>
+            <input type="email" name="correo" placeholder="Correo Personal" required>
+            <select name="rol"><option value="HAB">Habitante</option><option value="STF">Staff</option></select>
+            <textarea name="motivo" placeholder="¿Por qué tú?" rows="3" required></textarea>
+            <button type="submit" id="btnEnviar">Enviar Registro</button>
         </form>
     </div>
 
     <script>
-        // TU URL DE GOOGLE SCRIPT ACTUALIZADA
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz1A_zX8X8uv7WfHAAqS-iZtqnnNgA7r4WuXh_CWXxPVXtQKGMtLlTQyc9Sb8TD0PLu/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxOuJkxPbL5n3LJdQtI5GscBqIQ6-ZrA86KqjpZJtDu7GUclbT9hnQLTPJWhv7IExlm/exec';
 
-        const form = document.getElementById('formularioRegistro');
-        const btn = document.getElementById('btnEnviar');
-        const cont = document.getElementById('contenedor');
-
-        form.addEventListener('submit', async (e) => {
+        document.getElementById('formularioRegistro').addEventListener('submit', function(e) {
             e.preventDefault();
-            btn.innerText = "Procesando...";
+            const btn = document.getElementById('btnEnviar');
+            btn.innerText = "Registrando...";
             btn.disabled = true;
 
-            // Generamos un folio temporal para mostrar mientras se guarda
-            const rolSel = form.rol.value;
-            const folioProvisional = rolSel + "-" + Math.floor(1000 + Math.random() * 9000);
+            const folio = document.getElementsByName('rol')[0].value + "-" + Math.floor(1000 + Math.random() * 9000);
+            const formData = new URLSearchParams();
+            formData.append('usuario', document.getElementsByName('usuario')[0].value);
+            formData.append('whatsapp', document.getElementsByName('whatsapp')[0].value);
+            formData.append('edad', document.getElementsByName('edad')[0].value);
+            formData.append('correo', document.getElementsByName('correo')[0].value);
+            formData.append('rol', document.getElementsByName('rol')[0].value);
+            formData.append('motivo', document.getElementsByName('motivo')[0].value);
+            formData.append('folio', folio);
 
-            const formData = new FormData(form);
-            // Agregamos el folio a los datos que se envían al Excel
-            formData.append('folio', folioProvisional);
-
-            try {
-                // Enviamos a Google Sheets
-                await fetch(scriptURL, { 
-                    method: 'POST', 
-                    body: formData, 
-                    mode: 'no-cors' 
-                });
-
-                // Cambiamos el contenido de la tarjeta por el mensaje de éxito
-                cont.innerHTML = `
-                    <h2 class="success-msg">¡REGISTRO RECIBIDO!</h2>
-                    <p>Gracias por postularte. Tu folio oficial es:</p>
-                    <div id="folioDisplay">${folioProvisional}</div>
-                    <p style="font-size: 13px;">Guarda este folio. Lo necesitarás para consultar si fuiste seleccionado en la sección de "Consultar".</p>
-                    <button onclick="location.href='index.html'" style="background:#334155; margin-top:10px;">Volver al Inicio</button>
-                `;
-
-            } catch (error) {
-                console.error('Error!', error.message);
-                alert("Hubo un error al enviar. Revisa tu conexión.");
-                btn.innerText = "Enviar mi Registro";
-                btn.disabled = false;
-            }
+            fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
+            .then(() => {
+                document.getElementById('contenedor').innerHTML = `
+                    <h2 style="color: #22c55e;">¡REGISTRO ENVIADO!</h2>
+                    <p>Tu folio oficial es:</p>
+                    <div id="folioDisplay">${folio}</div>
+                    <p>Guárdalo para consultar resultados.</p>
+                    <button onclick="location.href='index.html'" style="background:#334155; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer;">Volver</button>`;
+            })
+            .catch(() => { alert("Error al enviar."); btn.disabled = false; btn.innerText = "Enviar Registro"; });
         });
     </script>
 </body>
-</html>
+</html> 
