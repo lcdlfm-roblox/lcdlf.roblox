@@ -3,97 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Casa De Los Famosos - Registro</title>
+    <title>LCDLF - Registro y Consulta</title>
     <style>
         :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
-        body { background-color: var(--fondo); color: #ffffff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background-color: #1e293b; width: 100%; max-width: 500px; padding: 40px; border-radius: 20px; border-top: 6px solid var(--rosa); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
-        h1 { text-align: center; border-bottom: 2px solid var(--naranja); padding-bottom: 10px; text-transform: uppercase; font-size: 20px; }
-        label { display: block; margin-top: 15px; color: #cbd5e1; font-size: 14px; font-weight: bold; }
+        body { background-color: var(--fondo); color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--rosa); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: white; text-transform: uppercase; font-size: 22px; border-bottom: 2px solid var(--naranja); padding-bottom: 10px; }
+        label { display: block; margin-top: 15px; font-size: 13px; color: #cbd5e1; }
         input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 16px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
-        #exito { display: none; text-align: center; }
-        .folio-box { font-size: 32px; color: var(--naranja); font-weight: bold; margin: 20px 0; border: 2px dashed var(--rosa); padding: 15px; background: #0f172a; border-radius: 10px; }
-        .logo-img { width: 100px; display: block; margin: 0 auto 10px auto; border-radius: 50%; }
+        button { width: 100%; padding: 15px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
+        #exito, #seccionConsulta { display: none; text-align: center; }
+        .folio-box { font-size: 28px; color: var(--naranja); font-weight: bold; margin: 20px 0; border: 2px dashed var(--rosa); padding: 15px; background: #0f172a; border-radius: 10px; }
+        .btn-gris { background: #334155; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div id="contenedorForm">
-            <img src="https://pbs.twimg.com/profile_images/1653526955091214337/gYogD3FR_400x400.jpg" class="logo-img">
-            <h1>Registro de Aspirantes</h1>
-            
-            <form id="miFormulario">
+        <div id="contenedorRegistro">
+            <h1>Registro Aspirantes</h1>
+            <form id="formFamosos">
                 <label>Usuario de Roblox</label>
-                <input type="text" name="Usuario_Roblox" required>
-
+                <input type="text" name="usuario" required>
                 <label>WhatsApp</label>
-                <input type="tel" name="WhatsApp" required>
-
-                <label>¿A qué te postulas?</label>
-                <select name="Rol" id="rolSelect" required>
+                <input type="tel" name="whatsapp" required>
+                <label>Edad</label>
+                <input type="number" name="edad" required>
+                <label>Correo Electrónico</label>
+                <input type="email" name="correo" required>
+                <label>Rol</label>
+                <select name="rol" id="rolSelect">
                     <option value="HAB">Habitante</option>
                     <option value="STF">Staff</option>
                 </select>
-
-                <label>¿Por qué deberías entrar?</label>
-                <textarea name="Motivo" rows="3"></textarea>
-
+                <label>Motivo</label>
+                <textarea name="motivo" rows="2"></textarea>
                 <button type="submit" id="btnEnviar">Enviar Registro</button>
             </form>
+            <button class="btn-gris" onclick="verConsulta()">Consultar mi Folio</button>
         </div>
 
         <div id="exito">
-            <h2 style="color: var(--naranja);">¡REGISTRO RECIBIDO!</h2>
-            <p>Guarda tu folio oficial:</p>
+            <h2 style="color: var(--naranja);">¡REGISTRADO!</h2>
+            <p>Guarda tu folio:</p>
             <div id="mostrarFolio" class="folio-box"></div>
-            <p style="color: #94a3b8; font-size: 14px;">Toma captura de pantalla ahora.</p>
-            <button onclick="location.reload()" style="background: #334155;">Volver al inicio</button>
+            <button onclick="location.reload()">Volver</button>
+        </div>
+
+        <div id="seccionConsulta">
+            <h2>Consulta</h2>
+            <input type="text" id="inputBusqueda" placeholder="Ingresa tu folio">
+            <button onclick="ejecutarConsulta()">Verificar Estatus</button>
+            <div id="resultadoBusqueda" style="margin-top: 20px; font-weight: bold;"></div>
+            <button class="btn-gris" onclick="location.reload()">Regresar</button>
         </div>
     </div>
 
     <script>
-        const form = document.getElementById('miFormulario');
-        const btn = document.getElementById('btnEnviar');
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxKgxQwUCIvanX5S4H4XoJPmwGIDc9ds-dXPOQ3ljK2JeJUtPPnTHF0D5lSSq-YaI4m/exec';
 
-        form.addEventListener('submit', async function(e) {
+        // REGISTRO
+        document.getElementById('formFamosos').addEventListener('submit', async e => {
             e.preventDefault();
-            btn.innerText = "Procesando...";
+            const btn = document.getElementById('btnEnviar');
+            btn.innerText = "Enviando...";
             btn.disabled = true;
 
-            // 1. Generar Folio
-            const rol = document.getElementById('rolSelect').value;
-            const num = Math.floor(1000 + Math.random() * 9000);
-            const folioFinal = rol + "-" + num;
+            const folioFinal = document.getElementById('rolSelect').value + "-" + Math.floor(1000 + Math.random() * 9999);
+            const formData = new FormData(e.target);
+            formData.append('folio', folioFinal);
 
-            // 2. Preparar datos para Formspree
-            const formData = new FormData(form);
-            formData.append('Folio', folioFinal);
-
-            // 3. Enviar a Formspree sin recargar la página
             try {
-                const response = await fetch("https://formspree.io/f/mqeberwn", {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
-                });
-
-                if (response.ok) {
-                    document.getElementById('contenedorForm').style.display = 'none';
-                    document.getElementById('exito').style.display = 'block';
-                    document.getElementById('mostrarFolio').innerText = folioFinal;
-                } else {
-                    alert("Error al enviar. Intenta de nuevo.");
-                }
+                await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
+                document.getElementById('contenedorRegistro').style.display = 'none';
+                document.getElementById('exito').style.display = 'block';
+                document.getElementById('mostrarFolio').innerText = folioFinal;
             } catch (error) {
-                alert("Error de conexión.");
-            } finally {
+                alert("Error de conexión");
                 btn.innerText = "Enviar Registro";
                 btn.disabled = false;
             }
         });
-    </script>
 
+        // CONSULTA
+        function verConsulta() {
+            document.getElementById('contenedorRegistro').style.display = 'none';
+            document.getElementById('seccionConsulta').style.display = 'block';
+        }
+
+        async function ejecutarConsulta() {
+            const f = document.getElementById('inputBusqueda').value.trim();
+            const res = document.getElementById('resultadoBusqueda');
+            if(!f) return;
+            res.innerText = "Buscando...";
+            
+            try {
+                const response = await fetch(`${scriptURL}?folio=${f}`);
+                const texto = await response.text();
+                res.innerHTML = (texto === "Encontrado") ? 
+                    "<span style='color:#22c55e'>✅ FOLIO REGISTRADO</span>" : 
+                    "<span style='color:#ef4444'>❌ NO ENCONTRADO</span>";
+            } catch (e) {
+                res.innerText = "Error en la consulta";
+            }
+        }
+    </script>
 </body>
 </html>
