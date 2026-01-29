@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,84 +9,47 @@
         :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
         body { background-color: var(--fondo); color: #ffffff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
         .card { background-color: #1e293b; width: 100%; max-width: 500px; padding: 40px; border-radius: 20px; border-top: 6px solid var(--rosa); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
-        h1 { text-align: center; border-bottom: 2px solid var(--naranja); padding-bottom: 10px; text-transform: uppercase; font-size: 22px; }
+        h1 { text-align: center; border-bottom: 2px solid var(--naranja); padding-bottom: 10px; text-transform: uppercase; font-size: 20px; }
         label { display: block; margin-top: 15px; color: #cbd5e1; font-size: 14px; font-weight: bold; }
         input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
         button { width: 100%; padding: 16px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
-        #exito { display: none; text-align: center; }
-        .folio-box { font-size: 30px; color: var(--naranja); font-weight: bold; margin: 20px 0; border: 2px dashed var(--rosa); padding: 15px; background: #0f172a; }
-        .logo-img { width: 120px; display: block; margin: 0 auto 10px auto; border-radius: 50%; }
+        .logo-img { width: 100px; display: block; margin: 0 auto 10px auto; border-radius: 50%; }
+        p.instruccion { font-size: 12px; color: #94a3b8; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div id="form-box">
-            <img src="https://pbs.twimg.com/profile_images/1653526955091214337/gYogD3FR_400x400.jpg" class="logo-img">
-            <h1>La Casa De Los Famosos</h1>
-            <form id="registroForm">
-                <label>Usuario de Roblox</label>
-                <input type="text" name="usuario" required placeholder="Tu nombre en Roblox">
+        <img src="https://pbs.twimg.com/profile_images/1653526955091214337/gYogD3FR_400x400.jpg" class="logo-img">
+        <h1>Registro de Aspirantes</h1>
+        
+        <form action="https://formspree.io/f/mqeberwn" method="POST">
+            
+            <label>Usuario de Roblox</label>
+            <input type="text" name="Usuario_Roblox" required placeholder="Tu nombre en Roblox">
 
-                <label>WhatsApp</label>
-                <input type="tel" name="whatsapp" required placeholder="+52...">
+            <label>WhatsApp</label>
+            <input type="tel" name="WhatsApp" required placeholder="+52...">
 
-                <label>Edad</label>
-                <input type="number" name="edad" required>
+            <label>Edad</label>
+            <input type="number" name="Edad" required>
 
-                <label>Correo Electrónico</label>
-                <input type="email" name="correo" required>
+            <label>Correo Electrónico</label>
+            <input type="email" name="Email" required>
 
-                <label>¿A qué te postulas?</label>
-                <select name="rol" id="rol" required>
-                    <option value="HAB">Habitante</option>
-                    <option value="STF">Staff</option>
-                </select>
+            <label>¿A qué te postulas?</label>
+            <select name="Rol" required>
+                <option value="Habitante">Habitante</option>
+                <option value="Staff">Staff</option>
+            </select>
 
-                <label>¿Por qué deberías entrar?</label>
-                <textarea name="motivo" rows="2"></textarea>
+            <label>¿Por qué deberías entrar?</label>
+            <textarea name="Motivo" rows="3" placeholder="Cuéntanos sobre ti..."></textarea>
 
-                <button type="submit" id="btnEnviar">Enviar Registro</button>
-            </form>
-        </div>
-
-        <div id="exito">
-            <h2>¡Registro Exitoso!</h2>
-            <p>Tu folio oficial es:</p>
-            <div id="folio" class="folio-box"></div>
-            <     style="color: var(--rosa); font-weight: bold;">TOMA CAPTURA DE PANTALLA</p>
-            <button onclick="location.reload()" style="background: #334155;">Nuevo Registro</button>
-        </div>
+            <button type="submit">Enviar mi Registro</button>
+            <p class="instruccion">Al enviar, serás redirigido a una página de confirmación.</p>
+        </form>
     </div>
-   <script>
-         const scriptURL = 'https://script.google.com/macros/s/AKfycbzQXUdBysscScmglbwOgnz9suzMxnMqxa2PvTsTWocK2TG8N4RMg7-h_EYuV7rFXyq3/exec';
 
-        const form = document.getElementById('registroForm');
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            const btn = document.getElementById('btnEnviar');
-            btn.innerText = "Enviando...";
-            btn.disabled = true;
-
-            const rol = document.getElementById('rol').value;
-            const rand = Math.floor(1000 + Math.random() * 9000);
-            const folioFinal = `${rol}-${rand}`;
-
-            const formData = new FormData(form);
-            formData.append('folio', folioFinal);
-
-            fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors'})
-                .then(() => {
-                    document.getElementById('form-box').style.display = 'none';
-                    document.getElementById('exito').style.display = 'block';
-                    document.getElementById('folio').innerText = folioFinal;
-                })
-                .catch(error => {
-                    alert('Error al enviar');
-                    btn.innerText = "Enviar Registro";
-                    btn.disabled = false;
-                });
-        });
-    </script>
 </body>
 </html>
