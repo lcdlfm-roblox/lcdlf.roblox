@@ -5,113 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Casa De Los Famosos - Registro</title>
     <style>
-        /* Paleta: Rosa #db2777, Naranja #f59e0b, Azul #1e40af */
-        :root {
-            --rosa: #db2777;
-            --naranja: #f59e0b;
-            --azul-fuerte: #1e40af;
-            --fondo: #0f172a;
-        }
-
-        body {
-            background-color: var(--fondo);
-            color: #ffffff;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .card {
-            background-color: #1e293b;
-            width: 100%;
-            max-width: 500px;
-            padding: 40px;
-            border-radius: 20px;
-            /* Borde superior con degradado Rosa-Naranja */
-            border-top: 6px solid var(--rosa);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 26px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
-            color: #ffffff;
-            border-bottom: 2px solid var(--naranja);
-            padding-bottom: 10px;
-        }
-
-        label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 8px;
-            color: #cbd5e1;
-            font-weight: 600;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background-color: #0f172a;
-            color: white;
-            font-size: 15px;
-            box-sizing: border-box;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--rosa);
-        }
-
-        .flex-row {
-            display: flex;
-            gap: 15px;
-        }
-        .flex-row div { flex: 1; }
-
-        /* Botón Naranja/Rosa */
-        button {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(to right, var(--rosa), var(--naranja));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: opacity 0.3s;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        /* Pantalla Final */
-        #exito {
-            display: none;
-            text-align: center;
-        }
-
-        .folio-display {
-            font-size: 32px;
-            color: var(--naranja);
-            font-weight: bold;
-            margin: 20px 0;
-            padding: 15px;
-            border: 2px dashed var(--rosa);
-            background-color: #0f172a;
-        }
+        :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
+        body { background-color: var(--fondo); color: #ffffff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background-color: #1e293b; width: 100%; max-width: 500px; padding: 40px; border-radius: 20px; border-top: 6px solid var(--rosa); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        h1 { text-align: center; border-bottom: 2px solid var(--naranja); padding-bottom: 10px; text-transform: uppercase; }
+        label { display: block; margin-top: 15px; color: #cbd5e1; font-size: 14px; }
+        input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 16px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
+        #exito { display: none; text-align: center; }
+        .folio-display { font-size: 32px; color: var(--naranja); font-weight: bold; margin: 20px 0; border: 2px dashed var(--rosa); padding: 15px; }
     </style>
 </head>
 <body>
@@ -121,58 +23,64 @@
             <h1>La Casa De Los Famosos</h1>
             <form id="registroLcdlf">
                 <label>Usuario de Roblox</label>
-                <input type="text" id="user" required placeholder="Tu nombre de usuario">
+                <input type="text" name="usuario" required>
 
-                <div class="flex-row">
-                    <div>
-                        <label>WhatsApp</label>
-                        <input type="tel" id="whatsapp" required placeholder="+52...">
-                    </div>
-                    <div>
-                        <label>Edad</label>
-                        <input type="number" id="edad" required>
-                    </div>
-                </div>
+                <label>WhatsApp</label>
+                <input type="tel" name="whatsapp" required>
+
+                <label>Edad</label>
+                <input type="number" name="edad" required>
 
                 <label>Correo Electrónico</label>
-                <input type="email" id="correo" required placeholder="correo@ejemplo.com">
+                <input type="email" name="correo" required>
 
                 <label>¿A qué te postulas?</label>
-                <select id="rol" required>
-                    <option value="" disabled selected>Selecciona tu rol</option>
+                <select name="rol" id="rol" required>
                     <option value="HAB">Habitante</option>
                     <option value="STF">Staff</option>
                 </select>
 
                 <label>¿Por qué deberías entrar?</label>
-                <textarea id="motivo" rows="3" placeholder="Tu estrategia..."></textarea>
+                <textarea name="motivo" rows="2"></textarea>
 
-                <button type="submit">Enviar Registro</button>
+                <button type="submit" id="btnEnviar">Enviar Registro</button>
             </form>
         </div>
 
         <div id="exito">
-            <h2>¡Registro Recibido!</h2>
-            <p>Guarda tu folio oficial para la selección:</p>
+            <h2>¡Registro Guardado en BD!</h2>
+            <p>Tu folio oficial es:</p>
             <div id="folio" class="folio-display"></div>
-            <p style="color: var(--rosa); font-weight: bold;">TOMA CAPTURA DE PANTALLA</p>
-            <button onclick="location.reload()" style="background: #334155; margin-top: 15px;">Regresar</button>
+            <p style="color: var(--rosa);">TOMA CAPTURA DE PANTALLA</p>
         </div>
     </div>
 
     <script>
-        document.getElementById('registroLcdlf').addEventListener('submit', function(e) {
+        // REEMPLAZA ESTO CON TU URL DE GOOGLE SCRIPT
+        const scriptURL = 'TU_URL_AQUI'; 
+        const form = document.getElementById('registroLcdlf');
+
+        form.addEventListener('submit', e => {
             e.preventDefault();
+            document.getElementById('btnEnviar').innerText = "Enviando...";
 
             const rol = document.getElementById('rol').value;
             const rand = Math.floor(1000 + Math.random() * 9000);
             const folioFinal = `${rol}-${rand}`;
 
-            document.getElementById('form-box').style.display = 'none';
-            document.getElementById('exito').style.display = 'block';
-            document.getElementById('folio').innerText = folioFinal;
+            // Creamos los datos para enviar incluyendo el folio
+            const formData = new FormData(form);
+            formData.append('folio', folioFinal);
+            formData.append('fecha', new Date().toLocaleString());
+
+            fetch(scriptURL, { method: 'POST', body: formData})
+                .then(response => {
+                    document.getElementById('form-box').style.display = 'none';
+                    document.getElementById('exito').style.display = 'block';
+                    document.getElementById('folio').innerText = folioFinal;
+                })
+                .catch(error => alert('Error al guardar en base de datos'));
         });
     </script>
-
 </body>
 </html>
