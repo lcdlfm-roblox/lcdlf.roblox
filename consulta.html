@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF - Estatus</title>
+    <title>LCDLF - Estatus VIP</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
@@ -12,38 +12,49 @@
         input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; font-size: 18px; text-align: center; }
         button { width: 100%; padding: 15px; background: var(--rosa); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
         .info-box { background: #064e3b; padding: 20px; border-radius: 12px; border: 1px solid #22c55e; margin-top: 20px; }
-        .error-box { background: #450a0a; padding: 20px; border-radius: 12px; border: 1px solid #ef4444; margin-top: 20px; }
-        #pase-vip { background: white; color: black; padding: 50px; text-align: center; font-family: Arial; border: 15px solid #db2777; }
+        .warning-text { color: #fcd34d; font-size: 13px; margin-top: 15px; font-weight: bold; }
+        
+        /* DISEÑO PASE VIP PDF */
+        #pase-vip { background: white; color: black; padding: 50px; text-align: center; font-family: Arial; border: 12px solid #0f172a; }
+        .ticket-mail { color: #db2777; font-weight: bold; font-size: 18px; margin: 10px 0; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>Consultar Resultados</h1>
-    <input type="text" id="inputFolio" placeholder="TU FOLIO AQUÍ">
-    <button onclick="buscar()">Verificar</button>
+    <h1>Resultados LCDLF</h1>
+    <input type="text" id="inputFolio" placeholder="INGRESA TU FOLIO">
+    <button onclick="buscar()">Verificar Selección</button>
     <div id="resultado"></div>
-    <button onclick="location.href='index.html'" style="background:#334155; margin-top:15px; font-size: 11px;">Inicio</button>
+    <button onclick="location.href='index.html'" style="background:#334155; margin-top:15px; font-size: 10px;">Inicio</button>
 </div>
 
 <div style="display: none;">
     <div id="pase-vip">
         <h1 style="color:#db2777">LA CASA DE LOS FAMOSOS</h1>
         <hr>
-        <p>¡FELICIDADES!</p>
-        <h2 id="pdfNombre" style="font-size: 35px; text-transform: uppercase;"></h2>
-        <p>Has sido seleccionado como Habitante Oficial.</p>
-        <div style="font-size: 30px; font-weight: bold; border: 2px solid black; padding: 10px; margin: 20px;" id="pdfFolio"></div>
-        <p>Presenta este pase para ingresar.</p>
-        <br><br>
-        <p style="font-size: 12px;">alexissesence.mx</p>
+        <p style="font-size: 14px; letter-spacing: 3px;">PASE OFICIAL DE HABITANTE</p>
+        <h2 id="pdfNombre" style="font-size: 32px; text-transform: uppercase; margin: 20px 0;"></h2>
+        
+        <p>Tu correo institucional asignado:</p>
+        <div id="pdfCorreo" class="ticket-mail"></div>
+        
+        <p>Folio de Seguridad:</p>
+        <div style="font-size: 24px; font-weight: bold; border: 2px solid black; padding: 10px; margin: 10px;" id="pdfFolio"></div>
+        
+        <p style="background: #000; color: #fff; padding: 10px; font-size: 12px; margin-top: 30px;">
+            IMPORTANTE: GUARDA ESTE PDF. SE TE SOLICITARÁ PARA INGRESAR.
+        </p>
+        <p style="font-size: 10px; margin-top: 20px;">Validado en alexissesence.mx</p>
     </div>
 </div>
 
 <script>
+    // PEGA AQUÍ TU URL DE GOOGLE SCRIPTS
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyK3Lgh822F8iSxr2KwV1eIHhP3-kPJ66iDfTCtJGAT-UWcz3CzcknD-w9Pd5DCD58/exec';
-    let nombreSeleccionado = "";
-    let folioSeleccionado = "";
+    
+    let userNombre = "";
+    let userFolio = "";
 
     async function buscar() {
         const f = document.getElementById('inputFolio').value.trim();
@@ -53,29 +64,36 @@
 
         try {
             const resp = await fetch(scriptURL + "?folio=" + f);
-            const data = await resp.text(); 
+            const data = await resp.text();
 
             if (data.includes("SELECCIONADO")) {
-                const partes = data.split("|");
-                nombreSeleccionado = partes[1] || "HABITANTE";
-                folioSeleccionado = f;
-
+                userNombre = data.split("|")[1];
+                userFolio = f;
                 r.innerHTML = `
                     <div class="info-box">
-                        <span style="font-weight:bold; font-size:18px;">⭐ ¡FELICIDADES ${nombreSeleccionado}!</span><br><br>
-                        <button onclick="descargar()" style="background:#22c55e; border:none; color:white; padding:10px; cursor:pointer; font-weight:bold; border-radius:5px; width:100%;">📥 DESCARGAR PASE VIP</button>
+                        <span style="font-weight:bold; font-size:18px;">⭐ ¡HAS SIDO SELECCIONADO!</span><br>
+                        <p class="warning-text">⚠️ DESCARGA Y GUARDA EL PDF. SE TE SOLICITARÁ OBLIGATORIAMENTE PARA TU ENTRADA.</p>
+                        <button onclick="descargar()" style="background:#22c55e;">📥 DESCARGAR MI PASE VIP</button>
                     </div>`;
             } else {
-                r.innerHTML = `<div class="error-box">❌ No has sido seleccionado aún.</div>`;
+                r.innerHTML = `<div class="error-box">❌ Aún no has sido seleccionado.</div>`;
             }
         } catch (e) { r.innerHTML = "Error de conexión."; }
     }
 
     function descargar() {
-        document.getElementById('pdfNombre').innerText = nombreSeleccionado;
-        document.getElementById('pdfFolio').innerText = folioSeleccionado;
+        document.getElementById('pdfNombre').innerText = userNombre;
+        document.getElementById('pdfFolio').innerText = userFolio;
+        // Generar correo automático basado en el nombre de usuario
+        const correoLimpio = userNombre.replace(/\s+/g, '').toLowerCase();
+        document.getElementById('pdfCorreo').innerText = correoLimpio + "@alexissesence.mx";
+        
         const element = document.getElementById('pase-vip');
-        html2pdf().set({ margin: 0.5, filename: 'PASE_VIP_LCDLF.pdf' }).from(element).save();
+        html2pdf().set({ 
+            margin: 0.5, 
+            filename: 'Pase_Oficial_LCDLF.pdf',
+            html2canvas: { scale: 2 } 
+        }).from(element).save();
     }
 </script>
 </body>
