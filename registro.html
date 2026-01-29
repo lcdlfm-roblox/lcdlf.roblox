@@ -1,30 +1,89 @@
-<script>
-    // TU URL ACTUALIZADA
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzKr7kLvVgSJMeJcOJeY5kmsGYBet5q6bP0MEuvyuJObDXAWB2xWUilej31XjW3CkZV/exec';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCDLF - Registro de Aspirantes</title>
+    <style>
+        :root { --rosa: #db2777; --naranja: #f59e0b; --fondo: #0f172a; }
+        body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: #1e293b; padding: 30px; border-radius: 20px; border-top: 6px solid var(--rosa); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { font-size: 24px; margin-bottom: 10px; text-transform: uppercase; color: white; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; font-size: 14px; }
+        button { width: 100%; padding: 15px; background: linear-gradient(to right, var(--rosa), var(--naranja)); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
+        button:hover { opacity: 0.9; transform: scale(1.02); }
+        #folioDisplay { font-size: 28px; color: var(--naranja); font-weight: bold; margin: 20px 0; border: 2px dashed var(--rosa); padding: 15px; background: rgba(219, 39, 119, 0.1); }
+        .success-msg { color: #22c55e; font-weight: bold; }
+    </style>
+</head>
+<body>
 
-    document.getElementById('reg').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const b = document.getElementById('b');
-        b.innerText = "Enviando registro...";
-        b.disabled = true;
-
-        const fd = new FormData(e.target);
+    <div class="card" id="contenedor">
+        <h1>Inscripciones</h1>
+        <p style="color: #cbd5e1; font-size: 14px;">Completa tus datos para postularte</p>
         
-        try {
-            // Usamos mode: 'no-cors' para evitar bloqueos de seguridad de Google
-            await fetch(scriptURL, { method: 'POST', body: fd, mode: 'no-cors' });
+        <form id="formularioRegistro">
+            <input type="text" name="usuario" placeholder="Tu Usuario de Roblox" required>
+            <input type="tel" name="whatsapp" placeholder="WhatsApp (Ej: +52...)" required>
+            <input type="number" name="edad" placeholder="Tu Edad" required>
+            <input type="email" name="correo" placeholder="Correo Electrónico" required>
             
-            // Como usamos no-cors, no podemos leer la respuesta, así que avisamos al usuario
-            document.getElementById('c').innerHTML = `
-                <h2 style="color: #22c55e;">¡REGISTRO ENVIADO!</h2>
-                <p>Tu información se ha mandado al Staff.</p>
-                <p style="font-weight:bold; color:var(--naranja);">Revisa el Excel en unos segundos.</p>
-                <button onclick="location.href='index.html'">Volver al Inicio</button>
-            `;
-        } catch (e) { 
-            alert("Error al conectar con el servidor."); 
-            b.innerText = "Enviar Registro";
-            b.disabled = false;
-        }
-    });
-</script>
+            <select name="rol">
+                <option value="HAB">Postular como Habitante</option>
+                <option value="STF">Postular como Staff</option>
+            </select>
+            
+            <textarea name="motivo" placeholder="¿Por qué deberías ser elegido?" rows="3" required></textarea>
+            
+            <button type="submit" id="btnEnviar">Enviar mi Registro</button>
+        </form>
+    </div>
+
+    <script>
+        // TU URL DE GOOGLE SCRIPT ACTUALIZADA
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzKr7kLvVgSJMeJcOJeY5kmsGYBet5q6bP0MEuvyuJObDXAWB2xWUilej31XjW3CkZV/exec';
+
+        const form = document.getElementById('formularioRegistro');
+        const btn = document.getElementById('btnEnviar');
+        const cont = document.getElementById('contenedor');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btn.innerText = "Procesando...";
+            btn.disabled = true;
+
+            // Generamos un folio temporal para mostrar mientras se guarda
+            const rolSel = form.rol.value;
+            const folioProvisional = rolSel + "-" + Math.floor(1000 + Math.random() * 9000);
+
+            const formData = new FormData(form);
+            // Agregamos el folio a los datos que se envían al Excel
+            formData.append('folio', folioProvisional);
+
+            try {
+                // Enviamos a Google Sheets
+                await fetch(scriptURL, { 
+                    method: 'POST', 
+                    body: formData, 
+                    mode: 'no-cors' 
+                });
+
+                // Cambiamos el contenido de la tarjeta por el mensaje de éxito
+                cont.innerHTML = `
+                    <h2 class="success-msg">¡REGISTRO RECIBIDO!</h2>
+                    <p>Gracias por postularte. Tu folio oficial es:</p>
+                    <div id="folioDisplay">${folioProvisional}</div>
+                    <p style="font-size: 13px;">Guarda este folio. Lo necesitarás para consultar si fuiste seleccionado en la sección de "Consultar".</p>
+                    <button onclick="location.href='index.html'" style="background:#334155; margin-top:10px;">Volver al Inicio</button>
+                `;
+
+            } catch (error) {
+                console.error('Error!', error.message);
+                alert("Hubo un error al enviar. Revisa tu conexión.");
+                btn.innerText = "Enviar mi Registro";
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
