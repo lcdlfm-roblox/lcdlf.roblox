@@ -3,51 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF | Consulta VIP</title>
+    <title>LCDLF | Estatus de Gala</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root { --rosa: #db2777; --dorado: #fbbf24; --fondo: #0f172a; }
-        body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: #1e293b; padding: 30px; border-radius: 20px; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-top: 6px solid var(--dorado); }
-        input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: white; font-size: 1.2rem; text-align: center; }
-        button { width: 100%; padding: 15px; background: var(--rosa); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        button:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(219, 39, 119, 0.4); }
-        .contrato-container { background: #000; padding: 15px; border-radius: 10px; text-align: left; font-size: 0.8rem; height: 150px; overflow-y: scroll; border: 1px solid #333; margin: 15px 0; }
-        .success-box { background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e; padding: 20px; border-radius: 15px; margin-top: 20px; }
+        :root { 
+            --rosa: #db2777; 
+            --dorado: #fbbf24; 
+            --fondo: #020617; 
+            --card: rgba(30, 41, 59, 0.7); 
+        }
+        body { margin: 0; min-height: 100vh; font-family: "Segoe UI", sans-serif; background: var(--fondo); display: flex; align-items: center; justify-content: center; color: white; padding: 20px; }
         
-        /* DISEÑO FIEL A TU IMAGEN PARA EL PDF */
-        #pdf-template { width: 500px; height: 700px; background: #000; color: white; position: relative; font-family: 'Arial', sans-serif; text-align: center; }
-        .pdf-header { background: linear-gradient(to right, #b45309, #fbbf24, #b45309); color: black; padding: 10px; font-weight: bold; letter-spacing: 5px; font-size: 14px; }
-        .pdf-title { color: #db2777; font-size: 38px; font-weight: bold; margin-top: 40px; text-transform: uppercase; line-height: 1.1; }
-        .pdf-temp { color: #fbbf24; letter-spacing: 8px; font-size: 14px; margin-top: 15px; }
-        .pdf-welcome { font-size: 16px; color: #94a3b8; margin-top: 40px; }
-        .pdf-name { font-size: 45px; margin: 20px 0; font-weight: bold; text-decoration: underline; }
-        .pdf-email { color: #fbbf24; font-size: 18px; margin-top: 10px; }
-        .pdf-folio { font-size: 55px; font-weight: bold; margin-top: 40px; letter-spacing: 3px; }
-        .pdf-footer { position: absolute; bottom: 30px; width: 90%; left: 5%; background: #db2777; padding: 12px; font-weight: bold; font-size: 11px; }
+        body::before {
+            content: ""; position: fixed; inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(219,39,119,0.15), transparent 40%),
+                        radial-gradient(circle at 80% 80%, rgba(251,191,36,0.1), transparent 40%);
+            z-index: -1;
+        }
+
+        .card { 
+            background: var(--card); backdrop-filter: blur(12px); padding: 40px; border-radius: 26px; 
+            max-width: 460px; width: 100%; text-align: center; border: 1px solid rgba(251,191,36,0.3);
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+        }
+
+        h1 { color: var(--dorado); text-transform: uppercase; letter-spacing: 3px; font-size: 1.5rem; margin-bottom: 20px; }
+        
+        input { 
+            width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #334155; 
+            background: rgba(0,0,0,0.6); color: white; text-align: center; font-size: 1.2rem; box-sizing: border-box; 
+        }
+
+        .btn-verificar { 
+            width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: bold; 
+            background: linear-gradient(135deg, #be185d, #db2777); color: white; cursor: pointer; 
+            text-transform: uppercase; transition: 0.3s; margin-top: 10px;
+        }
+
+        .success-box { 
+            background: rgba(15, 23, 42, 0.8); border: 2px solid var(--rosa); padding: 25px; 
+            border-radius: 20px; margin-top: 25px; animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .contrato-box { 
+            height: 140px; overflow-y: scroll; background: #000; padding: 15px; border-radius: 10px; 
+            font-size: 0.85rem; border: 1px solid var(--dorado); margin: 15px 0; text-align: left; line-height: 1.5;
+        }
+
+        .btn-descargar { 
+            width: 100%; padding: 15px; background: #22c55e; color: white; border: none; 
+            border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase;
+        }
+
+        /* ESTILO DEL PDF (FIEL A TU DISEÑO) */
+        #pdf-template { width: 550px; height: 750px; background: #000; color: #fff; position: relative; font-family: 'Arial', sans-serif; text-align: center; }
+        .pdf-gold-bar { background: linear-gradient(to right, #b45309, #fbbf24, #b45309); color: #000; padding: 12px; font-weight: bold; letter-spacing: 5px; }
+        .pdf-title { color: #db2777; font-size: 45px; font-weight: bold; margin-top: 50px; }
+        .pdf-name { font-size: 48px; font-weight: bold; border-bottom: 2px solid #333; display: inline-block; padding: 10px 40px; margin: 30px 0; }
+        .pdf-folio { font-size: 60px; color: white; font-weight: bold; font-family: monospace; margin-top: 20px; }
+        .pdf-footer { position: absolute; bottom: 40px; width: 100%; background: #db2777; padding: 15px 0; font-weight: bold; font-size: 12px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>Consultar Selección</h1>
-    <input type="text" id="inputFolio" placeholder="TU FOLIO">
-    <button onclick="buscar()">Verificar</button>
+    <h1>ESTATUS HABITANTE</h1>
+    <input type="text" id="inputFolio" placeholder="INGRESA TU FOLIO">
+    <button class="btn-verificar" onclick="buscar()">VERIFICAR SELECCIÓN</button>
     <div id="resultado"></div>
 </div>
 
 <div style="display: none;">
     <div id="pdf-template">
-        <div class="pdf-header">PASE EXCLUSIVO</div>
+        <div class="pdf-gold-bar">PASE EXCLUSIVO VIP</div>
         <div class="pdf-title">LA CASA DE LOS FAMOSOS</div>
-        <div class="pdf-temp">TEMPORADA 2026</div>
-        <div class="pdf-welcome">Bienvenido(a) oficialmente:</div>
+        <div style="color:#fbbf24; letter-spacing: 8px;">TEMPORADA 2026</div>
+        <div style="margin-top: 50px; color: #94a3b8;">Bienvenido(a) oficialmente:</div>
         <div id="pdfNombre" class="pdf-name"></div>
-        <div>Tu cuenta institucional:</div>
-        <div id="pdfCorreo" class="pdf-email"></div>
-        <div style="margin-top: 30px;">Folio de Acceso:</div>
+        <div style="color: #fbbf24; font-size: 18px;" id="pdfCorreo"></div>
+        <div style="margin-top: 40px;">Folio de Acceso:</div>
         <div id="pdfFolio" class="pdf-folio"></div>
-        <div class="pdf-footer">⚠️ DOCUMENTO OBLIGATORIO PARA EL INGRESO - PROPIEDAD DE ALEXISSESENCE.MX</div>
+        <div class="pdf-footer">⚠️ DOCUMENTO OBLIGATORIO - PROPIEDAD DE ALEXISSESENCE.MX</div>
     </div>
 </div>
 
@@ -58,29 +96,39 @@
     async function buscar() {
         const f = document.getElementById('inputFolio').value.trim();
         if(!f) return;
-        document.getElementById('resultado').innerHTML = "Buscando...";
+        document.getElementById('resultado').innerHTML = "<p>Consultando...</p>";
+        
         try {
             const resp = await fetch(scriptURL + "?folio=" + f);
             const data = await resp.text();
+            
             if (data.includes("SELECCIONADO")) {
                 const parts = data.split("|");
                 userData = { nombre: parts[1], correo: parts[2], folio: f };
+                
                 document.getElementById('resultado').innerHTML = `
                     <div class="success-box">
-                        <p>✨ ¡ESTÁS DENTRO, ${userData.nombre}!</p>
-                        <p style="font-size: 12px;">Para descargar tu pase, acepta el contrato:</p>
-                        <div class="contrato-container">
-                            <b>CONTRATO LCDLF ROBLOX 2026</b><br>
-                            1. PROHIBICIÓN DE EXPLOITS: Sin scripts o hacks[cite: 4].<br>
-                            2. CONDUCTA: No toxicidad en chat de Roblox[cite: 12, 13].<br>
-                            3. IMAGEN: Aceptas ser grabado para TikTok/YouTube[cite: 9, 10].<br>
-                            4. CONFIDENCIALIDAD: No spoilers de retos o eliminaciones[cite: 14, 15].
+                        <h3 style="color:#fbbf24; margin:0;">✨ ¡ESTÁS DENTRO, ${userData.nombre}!</h3>
+                        <p style="font-size: 0.9rem;">Para obtener tu pase, acepta el contrato oficial:</p>
+                        
+                        <div class="contrato-box">
+                            <strong>CONTRATO LCDLF ROBLOX 2026</strong><br><br>
+                            1. <b>PROHIBICIÓN DE EXPLOITS:</b> Queda estrictamente prohibido el uso de scripts o hacks[cite: 2].<br>
+                            2. <b>CONDUCTA:</b> No se permite la toxicidad en el chat de Roblox[cite: 8, 9].<br>
+                            3. <b>IMAGEN:</b> Autorizas la grabación de tu avatar para TikTok y YouTube[cite: 6].<br>
+                            4. <b>CONFIDENCIALIDAD:</b> Te comprometes a no realizar spoilers de los retos[cite: 10, 11].
                         </div>
-                        <label style="font-size: 11px;"><input type="checkbox" id="checkContrato"> Acepto términos y condiciones.</label>
-                        <button onclick="validarDescarga()" style="background:#22c55e; margin-top:10px;">📥 DESCARGAR PASE OFICIAL</button>
+
+                        <label style="font-size: 0.8rem; display: block; margin-bottom: 15px;">
+                            <input type="checkbox" id="checkContrato"> He leído y acepto el contrato de habitante.
+                        </label>
+
+                        <button class="btn-descargar" onclick="validarDescarga()">📥 DESCARGAR PASE DE GALA</button>
                     </div>`;
-            } else { document.getElementById('resultado').innerHTML = "<p>Aún no has sido seleccionado.</p>"; }
-        } catch { document.getElementById('resultado').innerHTML = "<p>Error de conexión.</p>"; }
+            } else {
+                document.getElementById('resultado').innerHTML = "<p style='color:#ef4444; margin-top:20px;'>Folio no seleccionado.</p>";
+            }
+        } catch { document.getElementById('resultado').innerHTML = "<p>Error.</p>"; }
     }
 
     function validarDescarga() {
@@ -88,8 +136,17 @@
             document.getElementById('pdfNombre').innerText = userData.nombre;
             document.getElementById('pdfCorreo').innerText = userData.correo;
             document.getElementById('pdfFolio').innerText = userData.folio;
-            html2pdf().set({ filename: 'PASE_VIP_LCDLF.pdf', html2canvas: {scale: 2} }).from(document.getElementById('pdf-template')).save();
-        } else { alert("Debes aceptar el contrato primero."); }
+            
+            const element = document.getElementById('pdf-template');
+            html2pdf().set({
+                margin: 0,
+                filename: 'PASE_GALA_' + userData.nombre + '.pdf',
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'px', format: [550, 750], orientation: 'portrait' }
+            }).from(element).save();
+        } else {
+            alert("Debes aceptar el contrato.");
+        }
     }
 </script>
 </body>
