@@ -3,151 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF | Estatus de Gala</title>
+    <title>LCDLF | Consulta de Pasaporte</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
-        :root { 
-            --rosa: #db2777; 
-            --dorado: #fbbf24; 
-            --fondo: #020617; 
-            --card: rgba(30, 41, 59, 0.7); 
+        :root {
+            --rosa: #ec4899;
+            --dorado: #fbbf24;
+            --fondo: #020617;
+            --card: rgba(15, 23, 42, 0.9);
         }
-        body { margin: 0; min-height: 100vh; font-family: "Segoe UI", sans-serif; background: var(--fondo); display: flex; align-items: center; justify-content: center; color: white; padding: 20px; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #7c3aed, #020617);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 28px;
+            max-width: 460px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        h1 { color: var(--dorado); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 25px; }
         
-        body::before {
-            content: ""; position: fixed; inset: 0;
-            background: radial-gradient(circle at 20% 20%, rgba(219,39,119,0.15), transparent 40%),
-                        radial-gradient(circle at 80% 80%, rgba(251,191,36,0.1), transparent 40%);
-            z-index: -1;
+        input {
+            width: 100%; padding: 16px; margin-bottom: 20px; border-radius: 12px; 
+            border: 1px solid #334155; background: #000; color: white; text-align: center; font-size: 1.1rem;
         }
 
-        .card { 
-            background: var(--card); backdrop-filter: blur(12px); padding: 40px; border-radius: 26px; 
-            max-width: 460px; width: 100%; text-align: center; border: 1px solid rgba(251,191,36,0.3);
-            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+        .btn-consultar {
+            width: 100%; padding: 16px; border-radius: 12px; border: none;
+            background: linear-gradient(135deg, var(--rosa), #7c3aed);
+            color: white; font-weight: bold; cursor: pointer; text-transform: uppercase;
         }
 
-        h1 { color: var(--dorado); text-transform: uppercase; letter-spacing: 3px; font-size: 1.5rem; margin-bottom: 20px; }
-        
-        input { 
-            width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #334155; 
-            background: rgba(0,0,0,0.6); color: white; text-align: center; font-size: 1.2rem; box-sizing: border-box; 
+        .success-box {
+            margin-top: 25px; padding: 20px; border-radius: 18px;
+            background: rgba(0, 0, 0, 0.6); border: 1px solid var(--rosa); text-align: left;
         }
 
-        .btn-verificar { 
-            width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: bold; 
-            background: linear-gradient(135deg, #be185d, #db2777); color: white; cursor: pointer; 
-            text-transform: uppercase; transition: 0.3s; margin-top: 10px;
+        .contrato-scroll {
+            height: 160px; overflow-y: scroll; background: #000; padding: 15px;
+            font-size: 0.8rem; border-radius: 10px; margin: 15px 0;
+            border: 1px solid #444; line-height: 1.6; color: #e2e8f0;
         }
 
-        .success-box { 
-            background: rgba(15, 23, 42, 0.8); border: 2px solid var(--rosa); padding: 25px; 
-            border-radius: 20px; margin-top: 25px; animation: fadeIn 0.5s ease;
+        .btn-descargar {
+            width: 100%; padding: 15px; background: #22c55e; color: white;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .contrato-box { 
-            height: 140px; overflow-y: scroll; background: #000; padding: 15px; border-radius: 10px; 
-            font-size: 0.85rem; border: 1px solid var(--dorado); margin: 15px 0; text-align: left; line-height: 1.5;
+        .discord-btn {
+            display: block; background: #5865F2; color: white; text-decoration: none;
+            padding: 12px; border-radius: 10px; text-align: center; font-weight: bold;
+            margin-top: 15px; font-size: 0.85rem;
         }
 
-        .btn-descargar { 
-            width: 100%; padding: 15px; background: #22c55e; color: white; border: none; 
-            border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase;
+        /* --- PLANTILLA DEL PASAPORTE (ESTILO GALA) --- */
+        #pasaporte-diseno {
+            width: 500px; height: 700px; background: #000; color: white;
+            position: relative; text-align: center; font-family: 'Arial', sans-serif;
         }
-
-        /* ESTILO DEL PDF (FIEL A TU DISEÑO) */
-        #pdf-template { width: 550px; height: 750px; background: #000; color: #fff; position: relative; font-family: 'Arial', sans-serif; text-align: center; }
-        .pdf-gold-bar { background: linear-gradient(to right, #b45309, #fbbf24, #b45309); color: #000; padding: 12px; font-weight: bold; letter-spacing: 5px; }
-        .pdf-title { color: #db2777; font-size: 45px; font-weight: bold; margin-top: 50px; }
-        .pdf-name { font-size: 48px; font-weight: bold; border-bottom: 2px solid #333; display: inline-block; padding: 10px 40px; margin: 30px 0; }
-        .pdf-folio { font-size: 60px; color: white; font-weight: bold; font-family: monospace; margin-top: 20px; }
-        .pdf-footer { position: absolute; bottom: 40px; width: 100%; background: #db2777; padding: 15px 0; font-weight: bold; font-size: 12px; }
+        .pdf-top { background: var(--dorado); color: #000; padding: 15px; font-weight: bold; letter-spacing: 6px; }
+        .pdf-main-title { color: var(--rosa); font-size: 38px; font-weight: bold; margin-top: 60px; }
+        .pdf-sub { color: var(--dorado); letter-spacing: 10px; font-size: 14px; margin-top: 5px; }
+        .pdf-label { color: #64748b; font-size: 13px; margin-top: 45px; text-transform: uppercase; }
+        .pdf-value { font-size: 42px; font-weight: bold; border-bottom: 2px solid #1e293b; display: inline-block; padding: 5px 40px; }
+        .pdf-folio { font-size: 65px; font-weight: 800; color: white; margin-top: 20px; font-family: 'Courier New', monospace; }
+        .pdf-bottom { position: absolute; bottom: 0; width: 100%; background: var(--rosa); padding: 18px 0; font-weight: bold; font-size: 11px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>ESTATUS HABITANTE</h1>
-    <input type="text" id="inputFolio" placeholder="INGRESA TU FOLIO">
-    <button class="btn-verificar" onclick="buscar()">VERIFICAR SELECCIÓN</button>
+    <h1>PASAPORTE 2026</h1>
+    <input type="text" id="inputFolio" placeholder="TU FOLIO DE REGISTRO">
+    <button class="btn-consultar" onclick="buscar()">VERIFICAR ESTATUS</button>
     <div id="resultado"></div>
 </div>
 
 <div style="display: none;">
-    <div id="pdf-template">
-        <div class="pdf-gold-bar">PASE EXCLUSIVO VIP</div>
-        <div class="pdf-title">LA CASA DE LOS FAMOSOS</div>
-        <div style="color:#fbbf24; letter-spacing: 8px;">TEMPORADA 2026</div>
-        <div style="margin-top: 50px; color: #94a3b8;">Bienvenido(a) oficialmente:</div>
-        <div id="pdfNombre" class="pdf-name"></div>
-        <div style="color: #fbbf24; font-size: 18px;" id="pdfCorreo"></div>
-        <div style="margin-top: 40px;">Folio de Acceso:</div>
+    <div id="pasaporte-diseno">
+        <div class="pdf-top">PASAPORTE OFICIAL DE HABITANTE</div>
+        <div class="pdf-main-title">LA CASA DE LOS FAMOSOS</div>
+        <div class="pdf-sub">TEMPORADA 2026</div>
+        
+        <div class="pdf-label">Habitante Confirmado:</div>
+        <div id="pdfNombre" class="pdf-value"></div>
+        
+        <div class="pdf-label">Correo de Registro:</div>
+        <div id="pdfCorreo" style="color: var(--dorado); font-size: 19px; margin-top: 5px;"></div>
+        
+        <div class="pdf-label" style="margin-top: 60px;">Folio Único de Identidad:</div>
         <div id="pdfFolio" class="pdf-folio"></div>
-        <div class="pdf-footer">⚠️ DOCUMENTO OBLIGATORIO - PROPIEDAD DE ALEXISSESENCE.MX</div>
+
+        <div class="pdf-bottom">⚠️ ESTE DOCUMENTO ES INTRANSFERIBLE - ALEXISSESENCE.MX</div>
     </div>
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwD0ZPDmWuJbPYoAhYL4JRWi2407SeN_eCq84AWCvVQjg1gId32pK-WBXjznAuCTQ3n/exec';
-    let userData = {};
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwD0ZPDmWuJbPYoAhYL4JRWi2407SeN_eCq84AWCvVQjg1gId32pK-WBXjznAuCTQ3n/exec';
+let userData = {};
 
-    async function buscar() {
-        const f = document.getElementById('inputFolio').value.trim();
-        if(!f) return;
-        document.getElementById('resultado').innerHTML = "<p>Consultando...</p>";
-        
-        try {
-            const resp = await fetch(scriptURL + "?folio=" + f);
-            const data = await resp.text();
+async function buscar() {
+    const f = document.getElementById('inputFolio').value.trim();
+    if (!f) return;
+    document.getElementById('resultado').innerHTML = "<p>Consultando base de datos...</p>";
+
+    try {
+        const resp = await fetch(scriptURL + "?folio=" + f);
+        const data = await resp.text();
+
+        if (data.includes("SELECCIONADO")) {
+            const parts = data.split("|");
+            userData = { nombre: parts[1], correo: parts[2], folio: f };
             
-            if (data.includes("SELECCIONADO")) {
-                const parts = data.split("|");
-                userData = { nombre: parts[1], correo: parts[2], folio: f };
-                
-                document.getElementById('resultado').innerHTML = `
-                    <div class="success-box">
-                        <h3 style="color:#fbbf24; margin:0;">✨ ¡ESTÁS DENTRO, ${userData.nombre}!</h3>
-                        <p style="font-size: 0.9rem;">Para obtener tu pase, acepta el contrato oficial:</p>
-                        
-                        <div class="contrato-box">
-                            <strong>CONTRATO LCDLF ROBLOX 2026</strong><br><br>
-                            1. <b>PROHIBICIÓN DE EXPLOITS:</b> Queda estrictamente prohibido el uso de scripts o hacks[cite: 2].<br>
-                            2. <b>CONDUCTA:</b> No se permite la toxicidad en el chat de Roblox[cite: 8, 9].<br>
-                            3. <b>IMAGEN:</b> Autorizas la grabación de tu avatar para TikTok y YouTube[cite: 6].<br>
-                            4. <b>CONFIDENCIALIDAD:</b> Te comprometes a no realizar spoilers de los retos[cite: 10, 11].
-                        </div>
+            document.getElementById('resultado').innerHTML = `
+                <div class="success-box">
+                    <h3 style="color:var(--dorado); margin:0; text-align:center;">✨ ¡ESTÁS SELECCIONADO!</h3>
+                    <p style="font-size:0.8rem; text-align:center;">Acepta el contrato oficial para obtener tu Pasaporte:</p>
+                    
+                    <div class="contrato-scroll">
+                        <strong>CONTRATO DE PARTICIPACIÓN ROBLOX 2026</strong><br><br>
+                        1. <b>CONDUCTA:</b> Queda prohibido el lenguaje ofensivo fuera de rol y la toxicidad real.<br>
+                        2. <b>REGLAS TÉCNICAS:</b> El uso de scripts, hacks o exploits resultará en expulsión inmediata.<br>
+                        3. <b>IMAGEN:</b> Autorizas a la Producción el uso de tu avatar y voz para contenido en redes sociales.<br>
+                        4. <b>CONFIDENCIALIDAD:</b> Prohibido revelar resultados de retos antes de la gala oficial.<br>
+                        5. <b>ASISTENCIA:</b> Debes cumplir con los horarios de las galas y retos semanales.
+                    </div>
 
-                        <label style="font-size: 0.8rem; display: block; margin-bottom: 15px;">
-                            <input type="checkbox" id="checkContrato"> He leído y acepto el contrato de habitante.
-                        </label>
+                    <label style="font-size:0.8rem; display:block; margin-bottom:10px;">
+                        <input type="checkbox" id="checkAcepto"> He leído y acepto el contrato de habitante.
+                    </label>
 
-                        <button class="btn-descargar" onclick="validarDescarga()">📥 DESCARGAR PASE DE GALA</button>
-                    </div>`;
-            } else {
-                document.getElementById('resultado').innerHTML = "<p style='color:#ef4444; margin-top:20px;'>Folio no seleccionado.</p>";
-            }
-        } catch { document.getElementById('resultado').innerHTML = "<p>Error.</p>"; }
-    }
-
-    function validarDescarga() {
-        if(document.getElementById('checkContrato').checked) {
-            document.getElementById('pdfNombre').innerText = userData.nombre;
-            document.getElementById('pdfCorreo').innerText = userData.correo;
-            document.getElementById('pdfFolio').innerText = userData.folio;
-            
-            const element = document.getElementById('pdf-template');
-            html2pdf().set({
-                margin: 0,
-                filename: 'PASE_GALA_' + userData.nombre + '.pdf',
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'px', format: [550, 750], orientation: 'portrait' }
-            }).from(element).save();
+                    <button class="btn-descargar" onclick="generarPDF()">📥 OBTENER MI PASAPORTE</button>
+                    <a href="LINK_DE_TU_DISCORD" target="_blank" class="discord-btn">UNIRSE AL DISCORD OFICIAL</a>
+                </div>`;
         } else {
-            alert("Debes aceptar el contrato.");
+            document.getElementById('resultado').innerHTML = "<p style='color:#f87171;'>Folio no seleccionado todavía.</p>";
         }
+    } catch { document.getElementById('resultado').innerHTML = "<p>Error de conexión.</p>"; }
+}
+
+function generarPDF() {
+    if(!document.getElementById('checkAcepto').checked) {
+        alert("Debes aceptar el contrato primero.");
+        return;
     }
+    document.getElementById('pdfNombre').innerText = userData.nombre;
+    document.getElementById('pdfCorreo').innerText = userData.correo;
+    document.getElementById('pdfFolio').innerText = userData.folio;
+
+    const element = document.getElementById('pasaporte-diseno');
+    html2pdf().set({
+        margin: 0,
+        filename: 'Pasaporte_LCDLF_' + userData.nombre + '.pdf',
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'px', format: [500, 700], orientation: 'portrait' }
+    }).from(element).save();
+}
 </script>
 </body>
 </html>
