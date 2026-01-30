@@ -3,63 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF - Estatus VIP</title>
+    <title>LCDLF | Consulta VIP</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
-        :root { --rosa: #db2777; --dorado: #fbbf24; --fondo: #0f172a; }
-        body { background-color: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background-color: #1e293b; width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border-top: 6px solid var(--dorado); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 8px; background: #0f172a; color: white; border: 1px solid #334155; box-sizing: border-box; text-align: center; font-size: 18px; }
-        button { width: 100%; padding: 15px; background: var(--rosa); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
-        .info-box { background: #064e3b; padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid #22c55e; }
-        
-        /* --- ESTILO DEL PDF (DE GALA) --- */
-        #pase-vip { 
-            width: 600px; height: 800px; background: #000; color: white; padding: 0; 
-            text-align: center; font-family: 'Times New Roman', serif; position: relative; overflow: hidden;
+        :root {
+            --rosa: #ec4899;
+            --naranja: #fbbf24;
+            --morado: #8b5cf6;
+            --fondo: radial-gradient(circle at top, #f472b6, #7c3aed, #020617);
+            --card: rgba(15, 23, 42, 0.85);
         }
-        .pdf-border { border: 15px solid #1a1a1a; height: 770px; position: relative; }
-        .header-top { background: linear-gradient(to bottom, #fbbf24, #b45309); color: black; padding: 10px; font-weight: bold; letter-spacing: 5px; }
-        .title-main { font-size: 45px; color: #db2777; margin-top: 40px; text-transform: uppercase; font-weight: bold; }
-        .sub-title { font-size: 14px; letter-spacing: 10px; color: #fbbf24; margin-bottom: 50px; }
-        .user-name { font-size: 40px; margin: 20px 0; border-bottom: 2px solid #333; display: inline-block; padding: 0 30px; }
-        .email-box { color: #fbbf24; font-size: 18px; font-family: Arial, sans-serif; margin-bottom: 30px; }
-        .folio-box { font-size: 50px; font-weight: bold; color: white; margin: 40px 0; font-family: 'Courier New', monospace; }
-        .footer-banner { position: absolute; bottom: 40px; width: 100%; background: #db2777; color: white; padding: 15px 0; font-size: 12px; font-family: Arial; font-weight: bold; }
-        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 150px; opacity: 0.05; color: white; pointer-events: none; z-index: 0; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", sans-serif;
+            background: var(--fondo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(14px);
+            padding: 40px 35px;
+            border-radius: 26px;
+            max-width: 440px;
+            width: 92%;
+            text-align: center;
+            box-shadow: 0 0 35px rgba(236,72,153,.35), 0 25px 45px rgba(0,0,0,.6);
+        }
+
+        h1 {
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, var(--rosa), var(--naranja));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin: 20px 0;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,.25);
+            background: rgba(2,6,23,.7);
+            color: white;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--rosa), var(--morado));
+            color: white;
+            cursor: pointer;
+            transition: .3s;
+            text-transform: uppercase;
+        }
+
+        button:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(236,72,153,.7); }
+
+        .info-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #22c55e;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        /* DISEÑO PDF GALA */
+        #pase-vip { 
+            width: 600px; height: 800px; background: #000; color: white; text-align: center; 
+            font-family: serif; position: relative; border: 15px solid #1a1a1a;
+        }
     </style>
 </head>
-<body>
 
+<body>
 <div class="card">
     <h1>Estatus Habitante</h1>
-    <p style="color:#94a3b8">Ingresa tu folio para descargar tu credencial de gala.</p>
+    <p>Ingresa tu folio para consultar tu entrada</p>
     <input type="text" id="inputFolio" placeholder="EJ: HAB-1234">
-    <button onclick="buscar()">Verificar Mi Entrada</button>
+    <button onclick="buscar()">Verificar Selección</button>
     <div id="resultado"></div>
+    <a href="index.html" style="display:block; margin-top:20px; color:#aaa; text-decoration:none; font-size:0.8rem;">Volver al inicio</a>
 </div>
 
 <div style="display: none;">
     <div id="pase-vip">
-        <div class="pdf-border">
-            <div class="header-top">PASE EXCLUSIVO</div>
-            <div class="watermark">VIP</div>
-            
-            <h1 class="title-main">La Casa de los Famosos</h1>
-            <p class="sub-title">TEMPORADA 2026</p>
-            
-            <p style="font-size: 16px; color: #94a3b8;">Bienvenido(a) oficialmente:</p>
-            <div id="pdfNombre" class="user-name"></div>
-            
-            <p style="margin-top: 30px;">Tu cuenta institucional:</p>
-            <div id="pdfCorreo" class="email-box"></div>
-            
-            <p>Folio de Acceso:</p>
-            <div id="pdfFolio" class="folio-box"></div>
-            
-            <div class="footer-banner">
-                ⚠️ DOCUMENTO OBLIGATORIO PARA EL INGRESO - PROPIEDAD DE ALEXISSESENCE.MX
-            </div>
+        <div style="background: #fbbf24; color: black; padding: 10px; font-weight: bold;">PASE EXCLUSIVO VIP</div>
+        <h1 style="font-size: 45px; color: #db2777; margin-top: 50px;">La Casa de los Famosos</h1>
+        <p style="letter-spacing: 10px; color: #fbbf24;">TEMPORADA 2026</p>
+        <p style="margin-top:40px;">Bienvenido(a):</p>
+        <div id="pdfNombre" style="font-size: 35px; border-bottom: 2px solid #333; display: inline-block; padding: 10px 40px;"></div>
+        <p style="margin-top:30px;">Cuenta Institucional:</p>
+        <div id="pdfCorreo" style="color:#fbbf24; font-size:18px;"></div>
+        <div id="pdfFolio" style="font-size: 50px; font-weight: bold; margin: 40px 0; font-family: monospace;"></div>
+        <div style="position: absolute; bottom: 40px; width: 100%; background: #db2777; padding: 15px 0; font-weight: bold; font-size: 12px;">
+            ⚠️ DOCUMENTO OBLIGATORIO - SE PEDIRÁ AL INGRESAR
         </div>
     </div>
 </div>
@@ -71,44 +123,29 @@
     async function buscar() {
         const f = document.getElementById('inputFolio').value.trim();
         if(!f) return;
-        document.getElementById('resultado').innerHTML = "<p>Consultando base de datos...</p>";
-
+        document.getElementById('resultado').innerHTML = "<p>Buscando...</p>";
         try {
             const resp = await fetch(scriptURL + "?folio=" + f);
             const data = await resp.text();
-            
             if (data.includes("SELECCIONADO")) {
-                nData = data.split("|")[1];
-                fData = f;
+                nData = data.split("|")[1]; fData = f;
                 document.getElementById('resultado').innerHTML = `
                     <div class="info-box">
-                        <p style="font-size: 18px;">✨ ¡ESTÁS DENTRO, ${nData}!</p>
-                        <p style="font-size: 12px; color: #fbbf24;">Guarda el PDF, se te pedirá en la entrada.</p>
-                        <button onclick="descargar()" style="background:#22c55e;">📥 DESCARGAR PASE DE GALA</button>
+                        <p style="color:#22c55e; font-weight:bold;"> ¡ESTÁS DENTRO, ${nData}!</p>
+                        <button onclick="descargar()" style="background:#22c55e;">DESCARGAR FORMATO DE INGRESO</button>
                     </div>`;
             } else {
-                document.getElementById('resultado').innerHTML = "<p style='color:#ef4444; margin-top:20px;'>❌ Aún no has sido seleccionado o el folio no existe.</p>";
+                document.getElementById('resultado').innerHTML = "<p style='color:#ef4444; margin-top:20px;'>Folio no seleccionado.</p>";
             }
-        } catch {
-            document.getElementById('resultado').innerHTML = "<p>Error de conexión.</p>";
-        }
+        } catch { document.getElementById('resultado').innerHTML = "<p>Error.</p>"; }
     }
 
     function descargar() {
         document.getElementById('pdfNombre').innerText = nData;
         document.getElementById('pdfFolio').innerText = fData;
         document.getElementById('pdfCorreo').innerText = nData.replace(/\s+/g, '').toLowerCase() + "@alexissesence.mx";
-        
-        const element = document.getElementById('pase-vip');
-        const opt = {
-            margin: 0,
-            filename: `PASE_VIP_${nData}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'px', format: [600, 800], orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
+        html2pdf().set({ margin:0, filename: 'PASE_VIP.pdf', html2canvas: {scale:2} }).from(document.getElementById('pase-vip')).save();
     }
 </script>
 </body>
-</html>
+</html> 
