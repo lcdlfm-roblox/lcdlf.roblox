@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCDLF | Consulta de Pasaporte</title>
+    <title>LCDLF | Consulta de Resultados</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
@@ -98,9 +98,9 @@
 
 <div style="display: none;">
     <div id="pasaporte-diseno">
-        <div class="pdf-top">PASAPORTE OFICIAL DE HABITANTE</div>
+        <div class="pdf-top">FICHA DE HABITANTE</div>
         <div class="pdf-main-title">LA CASA DE LOS FAMOSOS</div>
-        <div class="pdf-sub">TEMPORADA 2026</div>
+        <div class="pdf-sub">ROBLOX</div>
         
         <div class="pdf-label">Habitante Confirmado:</div>
         <div id="pdfNombre" class="pdf-value"></div>
@@ -134,8 +134,8 @@ async function buscar() {
             
             document.getElementById('resultado').innerHTML = `
                 <div class="success-box">
-                    <h3 style="color:var(--dorado); margin:0; text-align:center;">✨ ¡ESTÁS SELECCIONADO!</h3>
-                    <p style="font-size:0.8rem; text-align:center;">Acepta el contrato oficial para obtener tu Pasaporte:</p>
+                    <h3 style="color:var(--dorado); margin:0; text-align:center;"> ¡ESTÁS SELECCIONADO!</h3>
+                    <p style="font-size:0.8rem; text-align:center;">Acepta el contrato oficial para obtener tu Ficha:</p>
                     
                     <div class="contrato-scroll">
                         <strong>CONTRATO DE PARTICIPACIÓN ROBLOX 2026</strong><br><br>
@@ -150,7 +150,7 @@ async function buscar() {
                         <input type="checkbox" id="checkAcepto"> He leído y acepto el contrato de habitante.
                     </label>
 
-                    <button class="btn-descargar" onclick="generarPDF()">📥 OBTENER MI PASAPORTE</button>
+                    <button class="btn-descargar" onclick="generarPDF()"> OBTENER MI FICHA</button>
                     <a href="https://discord.gg/B4Vaxb3a target="_blank" class="discord-btn">UNIRSE AL DISCORD OFICIAL</a>
                 </div>`;
         } else {
